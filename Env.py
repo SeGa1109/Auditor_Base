@@ -29,7 +29,12 @@ with open("load.png", "rb") as image_file:
 
 file_types = [("JPEG (*.jpg)", "*.jpg"),("All files (*.*)", "*.*")]
 
-def EmpdataFetch():
-    mycursor.execute("select Emp_code, employee_name,f_sp_name,Gender,Phone_no,base_salary "
-                     "from register where active_status = 'Y' and emp_code LIKE 'SIL' ")
-    return ([list(x) for x in mycursor.fetchall()])
+def EmpdataFetch(type):
+    if type=="PF":
+        mycursor.execute("select Emp_code, employee_name,f_sp_name,Gender,Phone_no,base_salary "
+                         "from register where active_status = 'Y' and ET ='PF' ")
+        return ([list(x) for x in mycursor.fetchall()])
+    if type=="Non PF":
+        mycursor.execute("select Emp_code, employee_name,f_sp_name,Gender,Phone_no,base_salary "
+                         "from register where active_status = 'Y' and ET ='Non PF' ")
+        return ([list(x) for x in mycursor.fetchall()])
