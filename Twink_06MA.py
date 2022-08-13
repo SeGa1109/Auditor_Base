@@ -51,8 +51,5 @@ while True:
             Menu[i].update(visible=False)
         Menu['atnpush'].update(visible=True)
 
-
-
-
     Register.RegisterFn(Menu,event,values)
 
