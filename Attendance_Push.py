@@ -50,8 +50,6 @@ def AttendancePushLay():
          [ms.Input(default_text= "Password",size=(15,1),font=fstyle,password_char="*",key='atppw')],[ms.Button("Update",font=fstyle,key='atp')]]
     return layout
 
-
-
 '''
 TestMenu = ms.Window("Attendance Push",layout,location=(0,0),size=(swi,shi),element_justification='center')
 while True:

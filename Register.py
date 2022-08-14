@@ -22,6 +22,7 @@ def RegsiterLay():
     return layout
 
 
+
 def RegisterFn(Menu, event, values):
     def Cleaning_Crew_GUI():
         layout = [[ms.Text("Cleaning Crew Register", font=fstylehd)],
@@ -41,7 +42,6 @@ def RegisterFn(Menu, event, values):
                             font=fstyle, size=(swi - 770, shi - 300), element_justification='center')],]
                  # [ms.Frame("Adding Crew",[[ms.Text("Name",size=(20,1)),ms.Text("Phone No",size=(20,1)))]])]]
         return layout
-
     def Employee_Add_GUI():
         Employee_Details = [
             [ms.Text("Employee Name:", justification='left', size=(20, 1), font=fstyle, ),
@@ -126,8 +126,6 @@ def RegisterFn(Menu, event, values):
             [ms.Button("Add", key="add employee", font=fstyle)]]
 
         return Employee_Add_GUI
-
-
     def Add_Employee(event, values):
 
 
@@ -152,7 +150,7 @@ def RegisterFn(Menu, event, values):
                 dict = {'employee_name': values['e1'], 'emp_code': values['e2'],'designation':values['e3'],'esic_no':values['e4'],'uan_no':values['e5'],
                         'aadhar_no': values['e6'],'address': values['e7'], 'f_sp_name': values['e8'],
                         'gender':"M" if values['m']==True else "F" if values['f']==True else "O" ,
-                        'shift_work':Yes if values["yes"]==True else "No",'base_salary': values['e9'],
+                        'shift_work':'Yes' if values["yes"]==True else "No",'base_salary': values['e9'],
                         'shift_1_salary': values['e10'],'shift_2_salary': values['e11'],'shift_3_salary': values['e12'],
                         'phone_no': values['e13'],'bank_account_no': values['e14'], 'bank_name': values['e15'],
                         'ifsc_code': values['e16'],'branch': values['e17'],'date_of_birth': values['e18'],
@@ -176,7 +174,6 @@ def RegisterFn(Menu, event, values):
 
             else:
                 ms.popup("Enter valid info..!")
-
     def Employee_update_GUI(epc):
         print("check",epc)
         mycursor.execute("select * from register where emp_code='%s'" % epc)
@@ -337,14 +334,15 @@ def RegisterFn(Menu, event, values):
                 ms.popup("Enter valid info..!")
     def Emp_code_Gen(type):
         if type=="PF":
-            mycursor.execute("SELECT emp_code FROM register WHERE emp_code LIKE 'SIL'")
-
-            return  str("SIL" + str((int("0" if (mycursor.fetchall())==None else str(len(mycursor.fetchall()))) + 1)).zfill(3))
+            mycursor.execute("SELECT emp_code FROM register WHERE emp_code LIKE 'SIL0%'")
+            db_data=mycursor.fetchall()
+            #print(mycursor.fetchall())
+            return  str("SIL" + str((int("0" if (db_data)==None else (len(db_data))) + 1)).zfill(3))
         if type=="Non PF":
-            mycursor.execute("SELECT emp_code FROM register WHERE emp_code LIKE 'SILTEMP'")
-            return "SILTEMP" + str((int("0" if (mycursor.fetchall())==None else str(len(mycursor.fetchall()))) + 1)).zfill(3)
+            mycursor.execute("SELECT emp_code FROM register WHERE emp_code LIKE 'SILTEMP%'")
+            db_data=mycursor.fetchall()
+            return "SILTEMP" + str((int("0" if (db_data)==None else str(len(db_data))) + 1)).zfill(3)
 
-    print(Emp_code_Gen("PF"))
     if event =="ccwin":
         ccwMenu = ms.Window("Add Employee", [
             [ms.Column(Cleaning_Crew_GUI(), scrollable=True, size=(760, 700), element_justification='centre')]])
@@ -353,8 +351,6 @@ def RegisterFn(Menu, event, values):
             if event == ms.WIN_CLOSED:
                 ccwMenu.close()
                 break
-
-
     if event == 'empadd':
         eMenu = ms.Window("Add Employee", [[ms.Column(Employee_Add_GUI(),scrollable=True,size=(760,700), element_justification='centre')]])
         while True:
@@ -483,7 +479,6 @@ def RegisterFn(Menu, event, values):
                 if values["u25"] == "y":
                     uMenu["u26"].update(disabled=True)
                     uMenu["date3"].update(disabled=True)
-
     if event == "Remove":
         chk = ms.popup_ok("Please Confirm to Delete", font=fstyle)
         if chk == "OK":

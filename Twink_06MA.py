@@ -27,7 +27,7 @@ layout=[[ms.Menu    (MenuDef, key='MENU',font=fstyle)],
 
 MenuList=["base","register"]
 
-Menu=ms.Window("Twink_Attendance",layout,location=(0,0),size=(swi,shi),element_justification='center')
+Menu = ms.Window("Twink_Attendance",layout,location=(0,0),size=(swi,shi),element_justification='center')
 
 while True:
     event,values=Menu.read()

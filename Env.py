@@ -6,7 +6,7 @@ import io
 from PIL import Image
 import base64
 from win32api import GetSystemMetrics
-
+import os
 mydb = mysql.connector.connect( host='localhost', user="root", passwd="MSeGa@1109",)
 mycursor = mydb.cursor()
 mycursor.execute('Use Twink_06ma')
