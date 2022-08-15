@@ -3,8 +3,9 @@ from Env import *
 #---Initiation
 from Env import *
 import Attendance_Push
+import Attendance_View
 import Register
-
+import Wage_Calc
 #---Custom DB Declaration
 mycursor.execute('Use Twink_06ma')
 mydb.commit()
@@ -20,12 +21,14 @@ BaseLayout=[[ms.Sizer(swi/2-170,0) ,ms.Text("SUNIL INDUSTRIES LIMITED",font=fsty
 
 layout=[[ms.Menu    (MenuDef, key='MENU',font=fstyle)],
         [
-        ms.Column  (BaseLayout,key="base",visible=True,size=(swi,shi),element_justification='center'),
+        ms.Column  (BaseLayout,key="base",visible=False,size=(swi,shi),element_justification='center'),
         ms.Column  (Register.RegsiterLay(),key='register',visible=False,size=(swi,shi),element_justification='center'),
-        ms.Column  (Attendance_Push.AttendancePushLay(),key='atnpush',visible=False,size=(swi,shi),element_justification='center')
+        ms.Column  (Attendance_Push.AttendancePushLay(),key='atnpush',visible=False,size=(swi,shi),element_justification='center'),
+        ms.Column  (Attendance_View.AttendanceViewLay(),key='atnview',visible=False,size=(swi,shi),element_justification='center'),
+        ms.Column  (Wage_Calc.WageCalcLay(),key='wagecalc',visible=True,size=(swi,shi),element_justification='center')
         ]]
 
-MenuList=["base","register"]
+MenuList=["base","register",'atnpush','atnview','wagecalc']
 
 Menu = ms.Window("Twink_Attendance",layout,location=(0,0),size=(swi,shi),element_justification='center')
 
@@ -51,5 +54,20 @@ while True:
             Menu[i].update(visible=False)
         Menu['atnpush'].update(visible=True)
 
+    if event == 'View':
+        for i in MenuList:
+            Menu[i].update(visible=False)
+        Menu['atnview'].update(visible=True)
+
+    if event == 'Wages':
+        for i in MenuList:
+            Menu[i].update(visible=False)
+        Menu['wagecalc'].update(visible=True)
+
+
+
     Register.RegisterFn(Menu,event,values)
+    Attendance_Push.AttendancePushFn(Menu,event,values)
+    Attendance_View.AttendaceViewFn(Menu,event,values)
+    Wage_Calc.WageCalcFn(Menu,event,values)
 
