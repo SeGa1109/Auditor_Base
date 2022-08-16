@@ -30,18 +30,21 @@ def RegisterFn(Menu, event, values):
 
                   [ms.Frame("Cleaning Crew Data",
                             [[ms.Table(values=CCWFetch(),
-                                       headings=["UID", "Name", "Phone No."],
+                                       headings=["UID", "Name", "Phone No","Pan No","Bank Account No"],
                                        justification='centre', enable_events=True, auto_size_columns=False,
                                        row_height=30,
-                                       col_widths=[10, 30, 30],
+                                       col_widths=[10, 20, 20,20,20],
                                        right_click_selects=True,
                                        right_click_menu=[[], ["Remove"]],
-                                       enable_click_events=True, size=(swi - 200, shi - 300), key="ccw_data",
+                                       enable_click_events=True, size=(swi - 100, shi - 300), key="ccw_data",
                                        font=fstyle)]],
-                            font=fstyle, size=(swi - 785, shi - 300), element_justification='center')],
-                  [ms.Frame("Adding Crew",[[ms.Text("Name",size=(20,1)),ms.Sizer(45,0),ms.Text("Phone No",size=(20,1))],
-                                           [ms.Input("", size=(20, 1), do_not_clear=True, key='c_name', font=fstyle),ms.Sizer(5,0),
-                                            ms.Input("", size=(20, 1), do_not_clear=True,enable_events=True, key='c_ph.no', font=fstyle),
+                            font=fstyle, size=(swi - 585, shi - 300), element_justification='center')],
+                  [ms.Frame("Adding Crew",[[ms.Text("Name",size=(20,1)),ms.Sizer(45,0),ms.Text("Phone No",size=(20,1)),ms.Sizer(40,0),
+                                            ms.Text("Pan No",size=(20,1)),ms.Sizer(40,0),ms.Text("Bank Account No",size=(20,1))],
+                                           [ms.Input("", size=(20, 1), do_not_clear=False, key='c_name', font=fstyle),ms.Sizer(5,0),
+                                            ms.Input("", size=(20, 1), do_not_clear=False, key='c_ph.no', font=fstyle),
+                                            ms.Input("", size=(20, 1), do_not_clear=False,key='c_pan.no', font=fstyle),
+                                            ms.Input("", size=(20, 1), do_not_clear=False,key='c_bkac.no', font=fstyle),
                                             ms.Button("Add",font=fstyle,key="add_crow")]],visible=False,key="add_frame")]]
         return layout
 
@@ -298,31 +301,33 @@ def RegisterFn(Menu, event, values):
                     chk = False
                     break
             if chk == True:
-                filename = str(values['u20'])
+                filename = str(values['u25'])
                 file = open(filename, 'rb').read()
                 image_data_ep = base64.b64encode(file)
-                filename = str(values['u21'])
+                filename = str(values['u26'])
                 file = open(filename, 'rb').read()
                 image_data_sp = base64.b64encode(file)
-                filename = str(values['u24'])
+                filename = str(values['u29'])
                 file = open(filename, 'rb').read()
                 image_data_np = base64.b64encode(file)
 
                 dict = {'employee_name': values['u1'],'designation':values['u3'],'esic_no':values['u4'],'uan_no':values['u5'],
                         'aadhar_no': values['u6'],'address': values['u7'], 'f_sp_name': values['u8'],
-                        'gender':"M" if VALUES['m']==True else "F" if values['f']==True else "O" ,
-                        'shift_work':Yes if values["yes"]==True else "No",'base_salary': values['u9'],
-                        'shift_1_salary': values['u10'],'shift_2_salary': values['u11'],'shift_3_salary': values['u12'],
-                        'phone_no': values['u13'],'bank_account_no': values['u14'], 'bank_name': values['u15'],
-                        'ifsc_code': values['u16'],'branch': values['u17'],'date_of_birth': values['u18'],
-                        'date_of_join': values['u19'],'photo': image_data_ep,'signature': image_data_sp,
-                        'nominee_name': values['u22'],'nominee_phone_no': values['u23'],'nominee_photo':image_data_np,
-                        'ET':"PF" if values['pf']==True else "Non PF",'active_status':values['u32'],'date_of_exit':values['u33']}
+                        'gender':"M" if values['u9']==True else "F" if values['u10']==True else "O" ,
+                        'shift_work':Yes if values["u12"]==True else "No",'base_salary': values['u14'],
+                        'shift_1_salary': values['u15'],'shift_2_salary': values['u16'],'shift_3_salary': values['u17'],
+                        'phone_no': values['u18'],'bank_account_no': values['u19'], 'bank_name': values['u20'],
+                        'ifsc_code': values['u21'],'branch': values['u22'],'date_of_birth': values['u23'],
+                        'date_of_join': values['u24'],'photo': image_data_ep,'signature': image_data_sp,
+                        'nominee_name': values['u27'],'nominee_phone_no': values['u28'],'nominee_photo':image_data_np,
+                        'ET':"PF" if values['u30']==True else "Non PF"}
 
-                placeholders = ', '.join(['%s'] * len(dict))
-                columns = ', '.join(dict.keys())
+                c_name=list(dict.keys())
+                c_data=list(dict.values())
                 for i in range(0,29):
-                    mycursor.execute("UPDATE 'register' SET %s = %s WHERE (`emp_code` = '%s')") %(values['u2'] )
+                    print(c_data[i])
+                    sql='UPDATE `twink_06ma`.`register` SET `%s` = "%s" WHERE (`emp_code` = "%s");' %(c_name[i],c_data[i],values['u2'] )
+                    mycursor.execute(sql)
 
                 mydb.commit()
 
@@ -355,7 +360,7 @@ def RegisterFn(Menu, event, values):
     print(Emp_code_Gen("PF"))
 
     if event =="ccwin":
-        ccwMenu = ms.Window("Add Crow", [[ms.Column(Cleaning_Crew_GUI(), scrollable=True, size=(760, 700), element_justification='centre')]])
+        ccwMenu = ms.Window("Add Crow", [[ms.Column(Cleaning_Crew_GUI(), scrollable=True, size=(960, 700), element_justification='centre')]])
         while True:
             event, values = ccwMenu.read()
             if event == ms.WIN_CLOSED:
@@ -364,7 +369,7 @@ def RegisterFn(Menu, event, values):
             if event =="ccwadd":
                 ccwMenu["add_frame"].update(visible=True)
             if event =="add_crow":
-                sql ="INSERT INTO cleaning_crow ( crow_name,phone_no ) VALUES ( '%s','%s' )" % (values['c_name'],values['c_ph.no'])
+                sql ="INSERT INTO cleaning_crow ( crow_name,phone_no,pan_no,bank_account ) VALUES ( '%s','%s','%s','%s' )" % (values['c_name'],values['c_ph.no'],values['c_pan.no'],values['c_bkac.no'])
                 mycursor.execute(sql)
                 mydb.commit()
                 ccwMenu['ccw_data'].update(values=CCWFetch())
@@ -470,9 +475,9 @@ def RegisterFn(Menu, event, values):
             if event == 'update employee':
                 Update_Employee(event, values)
             if event == "load pimg":
-                filename = values["u20"]
+                filename = values["u25"]
                 if os.path.exists(filename):
-                    image = Image.open(values["u20"])
+                    image = Image.open(values["u25"])
                     image.thumbnail((300, 300))
                     bio = io.BytesIO()
                     # Actually store the image in memory in binary
@@ -481,9 +486,9 @@ def RegisterFn(Menu, event, values):
                     uMenu["-IMAGE-"].update(data=bio.getvalue())
 
             if event == "load simg":
-                filename = values["u21"]
+                filename = values["u26"]
                 if os.path.exists(filename):
-                    image = Image.open(values["u21"])
+                    image = Image.open(values["u26"])
                     image.thumbnail((300, 300))
                     bio = io.BytesIO()
                     # Actually store the image in memory in binary
@@ -491,9 +496,9 @@ def RegisterFn(Menu, event, values):
                     # Use that image data in order to
                     uMenu["-IMAGE2-"].update(data=bio.getvalue())
             if event == "load nimg":
-                filename = values["u24"]
+                filename = values["u29"]
                 if os.path.exists(filename):
-                    image = Image.open(values["u24"])
+                    image = Image.open(values["u29"])
                     image.thumbnail((300, 300))
                     bio = io.BytesIO()
                     # Actually store the image in memory in binary

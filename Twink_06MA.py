@@ -22,10 +22,10 @@ BaseLayout=[[ms.Sizer(swi/2-170,0) ,ms.Text("SUNIL INDUSTRIES LIMITED",font=fsty
 layout=[[ms.Menu    (MenuDef, key='MENU',font=fstyle)],
         [
         ms.Column  (BaseLayout,key="base",visible=False,size=(swi,shi),element_justification='center'),
-        ms.Column  (Register.RegsiterLay(),key='register',visible=False,size=(swi,shi),element_justification='center'),
+        ms.Column  (Register.RegsiterLay(),key='register',visible=True,size=(swi,shi),element_justification='center'),
         ms.Column  (Attendance_Push.AttendancePushLay(),key='atnpush',visible=False,size=(swi,shi),element_justification='center'),
         ms.Column  (Attendance_View.AttendanceViewLay(),key='atnview',visible=False,size=(swi,shi),element_justification='center'),
-        ms.Column  (Wage_Calc.WageCalcLay(),key='wagecalc',visible=True,size=(swi,shi),element_justification='center')
+        ms.Column  (Wage_Calc.WageCalcLay(),key='wagecalc',visible=False,size=(swi,shi),element_justification='center')
         ]]
 
 MenuList=["base","register",'atnpush','atnview','wagecalc']

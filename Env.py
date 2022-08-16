@@ -1,3 +1,5 @@
+import copy
+
 import PySimpleGUI as ms
 import mysql.connector
 from datetime import *
@@ -34,9 +36,11 @@ todatestr=todate.strftime("%Y-%m-%d")
 todatenf=todate.strftime("%d-%m-%Y")
 todatemy=todate.strftime("%m-%Y")
 file_types = [("JPEG (*.jpg)", "*.jpg"),("All files (*.*)", "*.*")]
+
 def CCWFetch():
     mycursor.execute("select * from cleaning_crow")
     return ([list(x) for x in mycursor.fetchall()])
+
 def EmpdataFetch(type):
     if type=="PF":
         mycursor.execute("select Emp_code, employee_name,f_sp_name,Gender,Phone_no,base_salary "
@@ -71,6 +75,7 @@ def DB_Creation(inp):
         mydb.commit()
     except:
         pass
+
 #DB_Creation("14-08-2022")
 
 def datasplit(data,filter):
@@ -108,6 +113,7 @@ def datasplit(data,filter):
                 else:
                     pass
     return data
+
 def attendance_fetch(inp):
     form = list(inp.split("-"))
     mycursor.execute("select register.employee_name,register.f_sp_name, %s_%s.* "
@@ -120,3 +126,4 @@ def attendance_fetch(inp):
         db_data[i].insert(0, db_data[i][2])
         del db_data[i][3]
     return db_data
+
