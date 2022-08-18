@@ -38,7 +38,7 @@ todatemy=todate.strftime("%m-%Y")
 file_types = [("JPEG (*.jpg)", "*.jpg"),("All files (*.*)", "*.*")]
 
 def CCWFetch():
-    mycursor.execute("select * from cleaning_crow")
+    mycursor.execute("select * from cleaning_crew")
     return ([list(x) for x in mycursor.fetchall()])
 
 def EmpdataFetch(type):
@@ -126,4 +126,30 @@ def attendance_fetch(inp):
         db_data[i].insert(0, db_data[i][2])
         del db_data[i][3]
     return db_data
+
+def wage_fetch():
+    mycursor.execute("Select emp_code,base_salary from register where shift_work='No' ")
+    db_data=[list(x) for x in mycursor.fetchall()]
+    #print(db_data)
+    dict_data={x[0]:float(x[1]) for x in db_data}
+    #print(dict_data)
+    mycursor.execute("Select emp_code,shift_1_salary,shift_2_salary,shift_3_salary from register where shift_work='Yes'")
+    db_data=[list(x) for x in mycursor.fetchall()]
+    output=[]
+    for step in db_data:
+        temp=[]
+        temp.append(step[0])
+        temp1=[]
+        for i in range (1,4):
+            temp1.append(float(step[i]))
+        temp.append(temp1)
+        output.append(temp)
+    dict_data_SY= {x[0]:x[1] for x in output}
+
+    dict_data.update(dict_data_SY)
+    print(dict_data)
+    return dict_data
+
+
+wage_fetch()
 

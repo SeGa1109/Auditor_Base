@@ -281,16 +281,16 @@ def RegisterFn(Menu, event, values):
                                key='date3',disabled=True), ],
 
         ]
-        Employee_Image = [[ms.Image(ep_data[23],key="-IMAGE-")]]
-        Signature_Image = [[ms.Image(ep_data[24],key="-IMAGE2-")]]
-        Nominee_Image = [[ms.Image(ep_data[27],key="-IMAGE3-")]]
+        #Employee_Image = [[ms.Image(ep_data[23],key="-IMAGE-")]]
+       # Signature_Image = [[ms.Image(ep_data[24],key="-IMAGE2-")]]
+        #Nominee_Image = [[ms.Image(ep_data[27],key="-IMAGE3-")]]
         Employee_Update_GUI = [[
             ms.Column([[ms.Frame("Employee Details", Employee_Details, font=fstyle)]]),
             ms.Column([
-                [ms.Frame("Employee Photo", Employee_Image, size=(170, 200), font=fstyle)],
-                [ms.Frame("Signature", Signature_Image, size=(170, 100), font=fstyle)],
-                [ms.Frame(" Nominee Photo", Nominee_Image, size=(170, 200), font=fstyle)]])],
-            [ms.Button("", key="update employee", font=fstyle)]]
+                [ms.Frame("Employee Photo", [[]] ,size=(170, 200), font=fstyle)],
+                [ms.Frame("Signature",  [[]],size=(170, 100), font=fstyle)],
+                [ms.Frame(" Nominee Photo", [[]], size=(170, 200), font=fstyle)]])],
+            [ms.Button("",[[]], key="update employee", font=fstyle)]]
         return Employee_Update_GUI
 
     def Update_Employee(event, values):
@@ -380,7 +380,7 @@ def RegisterFn(Menu, event, values):
             if event =="Remove":
                 chk = ms.popup_ok("Please Confirm to Delete", font=fstyle)
                 if chk == "OK":
-                    mycursor.execute("DELETE FROM `twink_06ma`.`cleaning_crow` WHERE (`UID` = %d);" % int(crow1[0][0]))
+                    mycursor.execute("DELETE FROM `twink_06ma`.`cleaning_crew` WHERE (`UID` = %d);" % int(crow1[0][0]))
                     mydb.commit()
                     ccwMenu['ccw_data'].update(values=CCWFetch())
             if event =='c_ph.no':
