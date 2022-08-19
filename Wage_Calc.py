@@ -1,10 +1,4 @@
-import copy
-import os
-
-import openpyxl
-
 from Env import *
-
 def WageCalcLay():
     head=['Emp Code','Name','F/S Name','Days Present','S1','S2','S3','Wage','OT','OT Wages','Incentive','Gross Wages','PF','ESI','Adv.','Canteen','Net Wages']
     headwidth=[12,25,25,5,5,5,5,10,5,10,10,15,10,10,10,10,20]

@@ -1,3 +1,4 @@
+
 def wage_mon(dm):
     global atdata,MMenu,netwage
     todays_date = date.today()
@@ -33,7 +34,7 @@ def wage_mon(dm):
             datf = mycursor.fetchall()
             print(dat)
             salary = datf[0][0]
-            v = 0;
+            v = 0
             wage = 0
             for x in range(len(gcell)):
                 v += int(gcell[x][1])

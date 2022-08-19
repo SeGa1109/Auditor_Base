@@ -6,6 +6,7 @@ import Attendance_Push
 import Attendance_View
 import Register
 import Wage_Calc
+import Master_User
 #---Custom DB Declaration
 mycursor.execute('Use Twink_06ma')
 mydb.commit()

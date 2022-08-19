@@ -39,6 +39,11 @@ todatestr=todate.strftime("%Y-%m-%d")
 todatenf=todate.strftime("%d-%m-%Y")
 todatemy=todate.strftime("%m-%Y")
 file_types = [("JPEG (*.jpg)", "*.jpg"),("All files (*.*)", "*.*")]
+def border(element, color=None, width=3):
+    if color is None:
+        color = ms.theme_background_color()
+    element.Widget.configure(highlightcolor=color, highlightbackground=color,
+        highlightthickness=width)
 
 def CCWFetch():
     mycursor.execute("select * from cleaning_crew")
