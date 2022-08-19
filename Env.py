@@ -17,11 +17,14 @@ mycursor = mydb.cursor()
 mycursor.execute('Use Twink_06ma')
 mydb.commit
 
+mycursor.execute("select value from nrdb order by description")
+nrdb_data=list(sum(mycursor.fetchall(),()))
+print(nrdb_data)
 shi=GetSystemMetrics(1)-100
 swi=GetSystemMetrics(0)
 
-fstyle=('Courier New',12)
-fstylehd=('Courier New',14)
+fstyle=(nrdb_data[0],int(nrdb_data[1]))
+fstylehd=(nrdb_data[0],int(nrdb_data[1])+2)
 file_types = [("JPEG (*.jpg)", "*.jpg"),("All files (*.*)", "*.*")]
 os.chdir('C:\ERP\Icons')
 with open("choose.png", "rb") as image_file:
@@ -75,8 +78,6 @@ def DB_Creation(inp):
         mydb.commit()
     except:
         pass
-
-#DB_Creation("14-08-2022")
 
 def datasplit(data,filter):
 
@@ -149,7 +150,6 @@ def wage_fetch():
     dict_data.update(dict_data_SY)
     print(dict_data)
     return dict_data
-
 
 wage_fetch()
 
