@@ -100,7 +100,7 @@ def AttendancePushLay():
 
     layout=[
         [ms.Text("Attendance Register",font=fstylehd)],
-        [ms.Text("Entry Person",font=fstyle,size=(12,1)),ms.Combo(values=["Name1","Name2"],font=fstyle,size=(20,1),key='atpers'),ms.Sizer(swi-650,0),
+        [ms.Text("Entry Person",font=fstyle,size=(12,1)),ms.Combo(values=user_name(),font=fstyle,size=(20,1),key='atpers'),ms.Sizer(swi-650,0),
          ms.Text("Date",font=fstyle,size=(5,1)),ms.InputText("",size=(15,1),font=fstyle,key="atpdate"),
          ms.CalendarButton(" ",target='atpdate',format="%d-%m-%Y",location=(1250,100))],
         [ms.Frame("Entry",layout= [[ms.Column(datalist,scrollable=True,vertical_scroll_only= True,visible=True,size=(swi-70,shi-220),key='atppf'),
@@ -111,9 +111,6 @@ def AttendancePushLay():
         [ms.Button("Update",font=fstyle,key='atpupdate')
          ]]
     return layout
-
-
-
 
 '''
 TestMenu = ms.Window("Attendance Push",layout,location=(0,0),size=(swi,shi),element_justification='center')
@@ -135,104 +132,111 @@ def AttendancePushFn(Menu,event,values):
             Menu['atpnpf'].update(visible=True)
 
     if event == 'atpupdate':
-        pushdate=list(values['atpdate'].split("-"))
-        DB_Creation(values['atpdate'])
-        mycursor.execute("select `%s` from %s_%s where empcode = 'counter'"%(pushdate[0],pushdate[1],pushdate[2]))
-        counter=mycursor.fetchall()[0][0]
-        mycursor.execute(
-            "INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')" \
-            % (todate.strftime("%Y/%m/%d %H:%M:%S"), values["atpers"],
-               datetime.strptime(values['atpdate'], "%d-%m-%Y").strftime("%Y-%m-%d"), "C"))
-        mydb.commit()
-        if counter != None:
-            chk1=ms.popup_get_text("Attendance Already Created in the specified Date\n---\nPlease click yes to Update with a Master password",
-                font=fstyle, no_titlebar=True)
-            if chk1 == "AstA0903":
-                mydb.rollback()
-                mycursor.execute("INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')"\
-                %(todate.strftime("%Y/%m/%d %H:%M:%S"),values["atpers"],
-                 datetime.strptime(values['atpdate'],"%d-%m-%Y").strftime("%Y-%m-%d"),"U"))
-                mydb.commit()
-                pass
-            else:
-                ms.popup_auto_close("Wrong Password",auto_close_duration=1)
-                return
+       if values['atppw']==user_pass(values['atpers']):
+           pushdate = list(values['atpdate'].split("-"))
+           DB_Creation(values['atpdate'])
+           mycursor.execute(
+               "select `%s` from %s_%s where empcode = 'counter'" % (pushdate[0], pushdate[1], pushdate[2]))
+           counter = mycursor.fetchall()[0][0]
+           mycursor.execute(
+               "INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')" \
+               % (todate.strftime("%Y/%m/%d %H:%M:%S"), values["atpers"],
+                  datetime.strptime(values['atpdate'], "%d-%m-%Y").strftime("%Y-%m-%d"), "C"))
+           mydb.commit()
+           if counter != None:
+               chk1 = ms.popup_get_text(
+                   "Attendance Already Created in the specified Date\n---\nPlease click yes to Update with a Master password",
+                   font=fstyle, no_titlebar=True)
+               if chk1 == "AstA0903":
+                   mydb.rollback()
+                   mycursor.execute(
+                       "INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')" \
+                       % (todate.strftime("%Y/%m/%d %H:%M:%S"), values["atpers"],
+                          datetime.strptime(values['atpdate'], "%d-%m-%Y").strftime("%Y-%m-%d"), "U"))
+                   mydb.commit()
+                   pass
+               else:
+                   ms.popup_auto_close("Wrong Password", auto_close_duration=1)
+                   return
 
-        atndata=[]
-        for i in range (len(emplistpy)):
-            data=[]
-            data.append(values['atpecsy'+str(i)])
-            if values['atp1ssy'+str(i)] == True:
-                indata = '1'
-            elif values['atp2ssy' + str(i)] == True:
-                indata = '2'
-            elif values['atp3ssy' + str(i)] == True:
-                indata = '3'
-            else:
-                indata = 'e'
-            indata+=","
-            indata+=str(values['atpotsy'+str(i)])
-            indata+=","
-            indata+=str(values['atpxpsy'+str(i)])
-            data.append(indata)
-            atndata.append(data)
-        for i in range (len(emplistpn)):
-            data=[]
-            data.append(values['atpecsn'+str(i)])
-            if values['atp1ssn'+str(i)] == True:
-                indata = 'P'
-            elif values['atp2ssn' + str(i)] == True:
-                indata = 'A'
-            else:
-                indata = 'e'
-            indata+=","
-            indata+=str(values['atpotsn'+str(i)])
-            indata+=","
-            indata+=str(values['atpxpsn'+str(i)])
-            data.append(indata)
-            atndata.append(data)
-        for i in range (len(emplistny)):
-            data=[]
-            data.append(values['atpecnsy'+str(i)])
-            if values['atp1snsy'+str(i)] == True:
-                indata = '1'
-            elif values['atp2snsy' + str(i)] == True:
-                indata = '2'
-            elif values['atp3snsy' + str(i)] == True:
-                indata = '3'
-            else:
-                indata = 'e'
-            indata+=","
-            indata+=str(values['atpotnsy'+str(i)])
-            indata+=","
-            indata+=str(values['atpxpnsy'+str(i)])
-            data.append(indata)
-            atndata.append(data)
-        for i in range (len(emplistnn)):
-            data=[]
-            data.append(values['atpecnsn'+str(i)])
-            if values['atp1snsn'+str(i)] == True:
-                indata = 'P'
-            elif values['atp2snsn' + str(i)] == True:
-                indata = 'A'
-            else:
-                indata = 'e'
-            indata+=","
-            indata+=str(values['atpotnsn'+str(i)])
-            indata+=","
-            indata+=str(values['atpxpnsn'+str(i)])
-            data.append(indata)
-            atndata.append(data)
-        print(pushdate,atndata)
-        for x in range(len(atndata)):
-            sql="update %s_%s set `%s` = '%s' where empcode = '%s'"% \
-                (pushdate[1],pushdate[2],pushdate[0],atndata[x][1],atndata[x][0])
-            mycursor.execute(sql)
+           atndata = []
+           for i in range(len(emplistpy)):
+               data = []
+               data.append(values['atpecsy' + str(i)])
+               if values['atp1ssy' + str(i)] == True:
+                   indata = '1'
+               elif values['atp2ssy' + str(i)] == True:
+                   indata = '2'
+               elif values['atp3ssy' + str(i)] == True:
+                   indata = '3'
+               else:
+                   indata = 'e'
+               indata += ","
+               indata += str(values['atpotsy' + str(i)])
+               indata += ","
+               indata += str(values['atpxpsy' + str(i)])
+               data.append(indata)
+               atndata.append(data)
+           for i in range(len(emplistpn)):
+               data = []
+               data.append(values['atpecsn' + str(i)])
+               if values['atp1ssn' + str(i)] == True:
+                   indata = 'P'
+               elif values['atp2ssn' + str(i)] == True:
+                   indata = 'A'
+               else:
+                   indata = 'e'
+               indata += ","
+               indata += str(values['atpotsn' + str(i)])
+               indata += ","
+               indata += str(values['atpxpsn' + str(i)])
+               data.append(indata)
+               atndata.append(data)
+           for i in range(len(emplistny)):
+               data = []
+               data.append(values['atpecnsy' + str(i)])
+               if values['atp1snsy' + str(i)] == True:
+                   indata = '1'
+               elif values['atp2snsy' + str(i)] == True:
+                   indata = '2'
+               elif values['atp3snsy' + str(i)] == True:
+                   indata = '3'
+               else:
+                   indata = 'e'
+               indata += ","
+               indata += str(values['atpotnsy' + str(i)])
+               indata += ","
+               indata += str(values['atpxpnsy' + str(i)])
+               data.append(indata)
+               atndata.append(data)
+           for i in range(len(emplistnn)):
+               data = []
+               data.append(values['atpecnsn' + str(i)])
+               if values['atp1snsn' + str(i)] == True:
+                   indata = 'P'
+               elif values['atp2snsn' + str(i)] == True:
+                   indata = 'A'
+               else:
+                   indata = 'e'
+               indata += ","
+               indata += str(values['atpotnsn' + str(i)])
+               indata += ","
+               indata += str(values['atpxpnsn' + str(i)])
+               data.append(indata)
+               atndata.append(data)
+           print(pushdate, atndata)
+           for x in range(len(atndata)):
+               sql = "update %s_%s set `%s` = '%s' where empcode = '%s'" % \
+                     (pushdate[1], pushdate[2], pushdate[0], atndata[x][1], atndata[x][0])
+               mycursor.execute(sql)
 
-        sql = "update %s_%s set `%s` = 'v' where empcode = 'counter'" % \
-              (pushdate[1], pushdate[2], pushdate[0],)
-        mycursor.execute(sql)
-        mydb.commit()
+           sql = "update %s_%s set `%s` = 'v' where empcode = 'counter'" % \
+                 (pushdate[1], pushdate[2], pushdate[0],)
+           mycursor.execute(sql)
+           mydb.commit()
+
+       else:
+           ms.popup_auto_close("Wrong Password", auto_close_duration=1)
 
 
 

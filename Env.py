@@ -45,6 +45,19 @@ def border(element, color=None, width=3):
     element.Widget.configure(highlightcolor=color, highlightbackground=color,
         highlightthickness=width)
 
+def MAILFetch():
+    mycursor.execute("select * from mail_list")
+    return ([list(x) for x in mycursor.fetchall()])
+
+def CCWORKFetch():
+    mycursor.execute("select * from cc_work_list")
+    return ([list(x) for x in mycursor.fetchall()])
+
+
+def MUWFetch():
+    mycursor.execute("select * from user_details")
+    return ([list(x) for x in mycursor.fetchall()])
+
 def CCWFetch():
     mycursor.execute("select * from cleaning_crew")
     return ([list(x) for x in mycursor.fetchall()])
@@ -157,4 +170,17 @@ def wage_fetch():
     return dict_data
 
 wage_fetch()
+def user_pass(name):
+    sql = "select user_password from user_details where `user_name`='%s'" % name
+    mycursor.execute(sql)
+    return [list(x) for x in mycursor.fetchall()]
+def user_name():
+    sql="select user_name from user_details"
+    mycursor.execute(sql)
+    return [list(x) for x in mycursor.fetchall()]
 
+def remove_data(Menu,event,values):
+    if event == "user_data"or 'wrk_data' or 'mail_data':
+        data = Menu[event].get()
+        inx = [data[row] for row in values[event]]
+    return inx
