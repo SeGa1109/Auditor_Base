@@ -187,3 +187,13 @@ def remove_data(Menu,event,values):
         data = Menu[event].get()
         inx = [data[row] for row in values[event]]
     return inx
+def Emp_code_Gen(type):
+        if type=="PF":
+            mycursor.execute("SELECT emp_code FROM register WHERE emp_code LIKE 'SIL0%'")
+            db_data=mycursor.fetchall()
+            #print(mycursor.fetchall())
+            return  str("SIL" + str((int("0" if (db_data)==None else (len(db_data))) + 1)).zfill(3))
+        if type=="Non PF":
+            mycursor.execute("SELECT emp_code FROM register WHERE emp_code LIKE 'SILTEMP%'")
+            db_data=mycursor.fetchall()
+            return "SILTEMP" + str((int("0" if (db_data)==None else str(len(db_data))) + 1)).zfill(3)

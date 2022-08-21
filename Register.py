@@ -135,7 +135,7 @@ def RegisterFn(Menu, event, values):
                 [ms.Frame("Employee Photo", Employee_Image,size=(170,200), font=fstyle)],
                 [ms.Frame("Signature", Signature_Image,size=(170,100), font=fstyle)],
                 [ms.Frame(" Nominee Photo", Nominee_Image,size=(170,200), font=fstyle)]])],
-            [ms.Button("Add", key="add employee", font=fstyle)]]
+            [ms.Button("Add", key="add employee", font=fstyle)],[ms.Text(" "),ms.Sizer(3,0)],[ms.Text(" ")],[ms.Text(" ")],[ms.Text(" ")],[ms.Text(" ")],[ms.Text(" ")]]
 
         return Employee_Add_GUI
 
@@ -193,103 +193,105 @@ def RegisterFn(Menu, event, values):
         ep_dat= list(mycursor.fetchall())
         ep_data=ep_dat[0]
         print("ep_data",ep_data)
-        if ep_data[9]=="M":
+        if ep_data[9]=="Yes":
+            m_val=[True,False]
+        else:
+            m_val=[False,True]
+        if ep_data[11]=="M":
             g_val=[True,False,False]
-        elif ep_data[9]=="F":
+        elif ep_data[11]=="F":
             g_val=[False,True,False]
         else :
             g_val=[False,False,True]
-        if ep_data[10]=="Yes":
+        if ep_data[12]=="Yes":
             s_val=[True,False]
         else:
             s_val=[False,True]
-        if ep_data[28]=="PF":
+        if ep_data[31]=="PF":
             et_val=[True,False]
-        elif ep_data[28]=="Non PF":
+        elif ep_data[31]=="Non PF":
             et_val=[False,True]
 
         Employee_Details = [
             [ms.Text("Employee Name:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[1], size=(30, 1), do_not_clear=True, key='u1', font=fstyle)],
+             ms.Input(ep_data[1], size=(30, 1), enable_events=True,do_not_clear=True, key='u1', font=fstyle)],
             [ms.Text("Emp Code:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[2], size=(30, 1),disabled=True, do_not_clear=True, key='u2', font=fstyle)],
+             ms.Input(ep_data[2], size=(30, 1),disabled=True, enable_events=True,do_not_clear=True, key='u2', font=fstyle)],
             [ms.Text("Designation:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Combo(("Worker","Supervisor","Manager"),default_value =ep_data[3], size=(29, 1), key='u3', font=fstyle)],
+             ms.Combo(ep_data[3],("Worker","Supervisor","Manager"),enable_events=True, size=(29, 1), key='u3', font=fstyle)],
             [ms.Text("ESIC NO:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[4], size=(30, 1), do_not_clear=True, key='u4', font=fstyle)],
+             ms.Input(ep_data[4], size=(30, 1), enable_events=True,do_not_clear=True, key='u4', font=fstyle)],
             [ms.Text("UAN NO:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[5], size=(30, 1), do_not_clear=True, key='u5', font=fstyle)],
+             ms.Input(ep_data[5], size=(30, 1), enable_events=True,do_not_clear=True, key='u5', font=fstyle)],
+            [ms.Text("Pan No:", justification='left', size=(20, 1), font=fstyle, ),
+             ms.Input(ep_data[6], size=(30, 1), enable_events=True,do_not_clear=True, key='u6', font=fstyle)],
             [ms.Text("Aadhar No:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[6], size=(30, 1), do_not_clear=True, key='u6', font=fstyle)],
+             ms.Input(ep_data[7], size=(30, 1), enable_events=True,do_not_clear=True, key='u7', font=fstyle)],
             [ms.Text("Address:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Multiline(ep_data[7], size=(28, 3), do_not_clear=True, key='u7', font=fstyle)],
+             ms.Multiline(ep_data[8], size=(28, 3), enable_events=True,do_not_clear=True, key='u8', font=fstyle)],
+            [ms.Text("Married Status:", justification='left', size=(20, 1), font=fstyle, ),
+             ms.Radio("Yes", "ms", size=(5, 1),default=m_val[0], enable_events=True, key='m_yes', font=fstyle),
+             ms.Radio("No", "ms", size=(5, 1),default=m_val[1], enable_events=True, key='m_no', font=fstyle)],
             [ms.Text("Father/Spouse Name:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[8], size=(30, 1), do_not_clear=True, key='u8', font=fstyle)],
+             ms.Input(ep_data[10], size=(30, 1), enable_events=True,do_not_clear=True, key='u9', font=fstyle)],
             [ms.Text("Gender:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Radio("M","gender", size=(5, 1),default=g_val[0], key='u9', font=fstyle),
-             ms.Radio("F","gender", size=(5, 1),default=g_val[1], key='u10', font=fstyle),
-             ms.Radio("O","gender", size=(5, 1),default=g_val[2], key='u11', font=fstyle)],
+             ms.Radio("M","gender",default=g_val[0], size=(5, 1), key='m', font=fstyle),
+             ms.Radio("F","gender",default=g_val[1], size=(5, 1), key='f', font=fstyle),
+             ms.Radio("O","gender",default=g_val[2], size=(5, 1), key='o', font=fstyle)],
             [ms.Text("Shift Work:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Radio("Yes","sw",default=s_val[0], size=(5, 1), key='u12', font=fstyle),
-             ms.Radio("No","sw",default=s_val[1], size=(5, 1), key='u13', font=fstyle)],
+             ms.Radio("Yes","sw",default=s_val[0], size=(5, 1),enable_events=True, key='yes', font=fstyle),
+             ms.Radio("No","sw",default=s_val[1], size=(5, 1),enable_events=True, key='no', font=fstyle)],
             [ms.Text("Base salary:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[11], size=(30, 1),disabled=True, do_not_clear=True, key='u14', font=fstyle)],
+             ms.Input(ep_data[13], size=(30, 1),disabled=True, enable_events=True,do_not_clear=True, key='u10', font=fstyle)],
             [ms.Text("Shift  salary:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[12], size=(9, 1),tooltip="shift 1 salary",disabled=True, do_not_clear=True, key='u15', font=fstyle),
-             ms.Input(ep_data[13], size=(9, 1),tooltip="shift 2 salary",disabled=True, do_not_clear=True, key='u16', font=fstyle),
-             ms.Input(ep_data[14], size=(9, 1),tooltip="shift 3 salary",disabled=True, do_not_clear=True, key='u17', font=fstyle)],
-
+             ms.Input(ep_data[14], size=(9, 1),tooltip="shift 1 salary",disabled=True, enable_events=True,do_not_clear=True, key='u11', font=fstyle),
+             ms.Input(ep_data[15], size=(9, 1),tooltip="shift 2 salary",disabled=True, enable_events=True,do_not_clear=True, key='u12', font=fstyle),
+             ms.Input(ep_data[16], size=(9, 1),tooltip="shift 3 salary",disabled=True, enable_events=True,do_not_clear=True, key='u13', font=fstyle)],
             [ms.Text("Phone No:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[15], size=(30, 1), do_not_clear=True, key='u18', font=fstyle)],
+             ms.Input(ep_data[17], size=(30, 1), enable_events=True,do_not_clear=True, key='u14', font=fstyle)],
+            [ms.Text("Blood Group:", justification='left', size=(20, 1), font=fstyle, ),
+             ms.Combo(ep_data[18],("O+","O-","A+"),enable_events=True, size=(30, 1), key='u15', font=fstyle)],
             [ms.Text("Bank Account Number:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[16], size=(30, 1), do_not_clear=True, key='u19', font=fstyle)],
+             ms.Input(ep_data[19], size=(30, 1), enable_events=True,do_not_clear=True, key='u16', font=fstyle)],
             [ms.Text("Bank Name:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[17], size=(30, 1), do_not_clear=True, key='u20', font=fstyle)],
+             ms.Input(ep_data[20], size=(30, 1), enable_events=True,do_not_clear=True, key='u17', font=fstyle)],
             [ms.Text("IFSC Code:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[18], size=(30, 1), do_not_clear=True, key='u21', font=fstyle)],
+             ms.Input(ep_data[21], size=(30, 1), enable_events=True,do_not_clear=True, key='u18', font=fstyle)],
             [ms.Text("Branch:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[19], size=(30, 1), do_not_clear=True, key='u22', font=fstyle)],
+             ms.Input(ep_data[22], size=(30, 1), enable_events=True,do_not_clear=True, key='u19', font=fstyle)],
             [ms.Text("Date of Birth :", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[20], size=(26, 1), do_not_clear=True, key='u23', font=fstyle),ms.Sizer(4, 0),
-             ms.CalendarButton('Choose',image_data=chse, format='%d-%m-%y', target='e23', font=fstyle, size=(6, 1), key='date1'), ],
+             ms.Input(ep_data[23], size=(26, 1), enable_events=True,do_not_clear=True, key='u20', font=fstyle),ms.Sizer(4, 0),
+             ms.CalendarButton('Choose',image_data=chse, format='%d-%m-%y', target='e20', font=fstyle, size=(6, 1), key='date1'), ],
             [ms.Text("Date of Joining :", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[21], size=(26, 1), do_not_clear=True, key='u24', font=fstyle),ms.Sizer(4, 0),
-             ms.CalendarButton('Choose',image_data=chse, format='%d-%m-%y', font=fstyle, target='e24', size=(6, 1), key='date2'), ],
+             ms.Input(ep_data[24], size=(26, 1), enable_events=True,do_not_clear=True, key='u21', font=fstyle),ms.Sizer(4, 0),
+             ms.CalendarButton('Choose',image_data=chse, format='%d-%m-%y', font=fstyle, target='u21', size=(6, 1), key='date1'), ],
             [ms.Text("photo:", justification='left', size=(20, 1), font=fstyle),
-             ms.Input(" ", size=(19, 1), do_not_clear=True, key='u25', font=fstyle),
-             ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u25",key="b1", font=fstyle),
+             ms.Input("", size=(19, 1), enable_events=True,do_not_clear=True, key='u22', font=fstyle),
+             ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u22",key="b1", font=fstyle),
              ms.Button("Load",image_data=load, font=fstyle,size=(5,1), key="load pimg"), ms.Sizer(2, 0),
              ],
             [ms.Text("Specimen Signature:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(" ", size=(19, 1), do_not_clear=True, key='u26', font=fstyle),
-             ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u26",key="b2", font=fstyle),
+             ms.Input("", size=(19, 1), enable_events=True,do_not_clear=True, key='u23', font=fstyle),
+             ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u23",key="b2", font=fstyle),
              ms.Button("Load",image_data=load,size=(5,1), font=fstyle, key="load simg"), ms.Sizer(2, 0),
              ],
             [ms.Text("Nominee Name:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[25], size=(30, 1), do_not_clear=True, key='u27', font=fstyle)],
+             ms.Input(ep_data[28], size=(30, 1), enable_events=True,do_not_clear=True, key='u24', font=fstyle)],
             [ms.Text("Nominee Phone No:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[26], size=(30, 1), do_not_clear=True, key='u28', font=fstyle)],
+             ms.Input(ep_data[29], size=(30, 1), enable_events=True,do_not_clear=True, key='u25', font=fstyle)],
             [ms.Text("Nominee photo:", justification='left', size=(20, 1), font=fstyle),
-             ms.Input("", size=(19, 1), do_not_clear=True, key='u29', font=fstyle),
-             ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u29",key="b3", font=fstyle),
+             ms.Input("", size=(19, 1), enable_events=True,do_not_clear=True, key='u26', font=fstyle),
+             ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u26",key="b3", font=fstyle),
              ms.Button("Load",image_data=load,size=(5,1), font=fstyle, key="load nimg"), ms.Sizer(2, 0),
              ],
             [ms.Text("ET :", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Radio("PF","etype",default=et_val[0], size=(5, 1),enable_events=True, key='u30', font=fstyle),
-             ms.Radio("Non PF","etype",default=et_val[1], size=(5, 1),enable_events=True, key='u31', font=fstyle)
+             ms.Radio("PF","etype",default=et_val[0], size=(5, 1),enable_events=True, key='pf', font=fstyle),
+             ms.Radio("Non PF","etype",default=et_val[1], size=(6, 1),enable_events=True, key='non pf', font=fstyle)
              ],
-
-            [ms.Text("Active:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Combo(("Y","N"),default_value=ep_data[29], size=(30, 1),enable_events=True, key='u32', font=fstyle)],
-            [ms.Text("Date of Exit :", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input(ep_data[22], size=(26, 1),disabled=True, do_not_clear=True, key='u33', font=fstyle), ms.Sizer(4, 0),
-             ms.CalendarButton('Choose', image_data=chse, format='%d-%m-%y', target='u33', font=fstyle, size=(6, 1),
-                               key='date3',disabled=True), ],
-
         ]
-        #Employee_Image = [[ms.Image(ep_data[23],key="-IMAGE-")]]
-       # Signature_Image = [[ms.Image(ep_data[24],key="-IMAGE2-")]]
-        #Nominee_Image = [[ms.Image(ep_data[27],key="-IMAGE3-")]]
+        Employee_Image = [[ms.Image(key="-IMAGE-")]]
+        Signature_Image = [[ms.Image(key="-IMAGE2-")]]
+        Nominee_Image = [[ms.Image(key="-IMAGE3-")]]
         Employee_Update_GUI = [[
             ms.Column([[ms.Frame("Employee Details", Employee_Details, font=fstyle)]]),
             ms.Column([
@@ -301,32 +303,32 @@ def RegisterFn(Menu, event, values):
 
     def Update_Employee(event, values):
         if event == "update employee":
-            for i in range(1, 25):
+            for i in range(1, 27):
                 chk=True
                 if values['u' + str(i)] == "":
-                    chk = False
                     break
+            print(chk)
             if chk == True:
-                filename = str(values['u25'])
+                filename = str(values['u22'])
                 file = open(filename, 'rb').read()
                 image_data_ep = base64.b64encode(file)
-                filename = str(values['u26'])
+                filename = str(values['u23'])
                 file = open(filename, 'rb').read()
                 image_data_sp = base64.b64encode(file)
-                filename = str(values['u29'])
+                filename = str(values['u26'])
                 file = open(filename, 'rb').read()
                 image_data_np = base64.b64encode(file)
 
                 dict = {'employee_name': values['u1'],'designation':values['u3'],'esic_no':values['u4'],'uan_no':values['u5'],
-                        'aadhar_no': values['u6'],'address': values['u7'], 'f_sp_name': values['u8'],
-                        'gender':"M" if values['u9']==True else "F" if values['u10']==True else "O" ,
-                        'shift_work':Yes if values["u12"]==True else "No",'base_salary': values['u14'],
-                        'shift_1_salary': values['u15'],'shift_2_salary': values['u16'],'shift_3_salary': values['u17'],
-                        'phone_no': values['u18'],'bank_account_no': values['u19'], 'bank_name': values['u20'],
-                        'ifsc_code': values['u21'],'branch': values['u22'],'date_of_birth': values['u23'],
-                        'date_of_join': values['u24'],'photo': image_data_ep,'signature': image_data_sp,
-                        'nominee_name': values['u27'],'nominee_phone_no': values['u28'],'nominee_photo':image_data_np,
-                        'ET':"PF" if values['u30']==True else "Non PF"}
+                        'aadhar_no': values['u6'],'address': values['u7'],'marriage_status':'Yes' if values["m_yes"]==True else "No", 'f_sp_name': values['u9'],
+                        'gender':"M" if values['m']==True else "F" if values['f']==True else "O" ,
+                        'shift_work':'Yes' if values["yes"]==True else "No",'base_salary': values['u10'],
+                        'shift_1_salary': values['u11'],'shift_2_salary': values['u12'],'shift_3_salary': values['u13'],
+                        'phone_no': values['u14'],'blood_group':values[15],'bank_account_no': values['u16'], 'bank_name': values['u17'],
+                        'ifsc_code': values['u18'],'branch': values['u19'],'date_of_birth': values['u20'],
+                        'date_of_join': values['u21'],'photo': image_data_ep,'signature': image_data_sp,
+                        'nominee_name': values['u24'],'nominee_phone_no': values['u25'],'nominee_photo':image_data_np,
+                        'ET':"PF" if values['pf']==True else "Non PF"}
 
                 c_name=list(dict.keys())
                 c_data=list(dict.values())
@@ -350,19 +352,6 @@ def RegisterFn(Menu, event, values):
 
             else:
                 ms.popup("Enter valid info..!")
-
-    def Emp_code_Gen(type):
-        if type=="PF":
-            mycursor.execute("SELECT emp_code FROM register WHERE emp_code LIKE 'SIL0%'")
-            db_data=mycursor.fetchall()
-            #print(mycursor.fetchall())
-            return  str("SIL" + str((int("0" if (db_data)==None else (len(db_data))) + 1)).zfill(3))
-        if type=="Non PF":
-            mycursor.execute("SELECT emp_code FROM register WHERE emp_code LIKE 'SILTEMP%'")
-            db_data=mycursor.fetchall()
-            return "SILTEMP" + str((int("0" if (db_data)==None else str(len(db_data))) + 1)).zfill(3)
-
-    print(Emp_code_Gen("PF"))
 
     if event =="ccwin":
         ccwMenu = ms.Window("Add Crow", [[ms.Column(Cleaning_Crew_GUI(), scrollable=True, size=(960, 700), element_justification='centre')]])
@@ -395,7 +384,9 @@ def RegisterFn(Menu, event, values):
                     ccwMenu['c_ph.no'].update(background_color=ms.DEFAULT_INPUT_ELEMENTS_COLOR)
 
     if event == 'empadd':
-        eMenu = ms.Window("Add Employee", [[ms.Column(Employee_Add_GUI(),scrollable=True,size=(760,700), element_justification='centre')]], finalize=True)
+        eMenu = ms.Window("Add Employee", [
+            [ms.Column(Employee_Add_GUI(), scrollable=True, size=(760, 700), element_justification='centre')]],
+                          finalize=True)
         while True:
             event, values = eMenu.read()
             if event == ms.WIN_CLOSED:
@@ -404,7 +395,7 @@ def RegisterFn(Menu, event, values):
 
             if event == 'add employee':
                 Add_Employee(event, values)
-                if values["pf"]==True:
+                if values["pf"] == True:
                     Menu["emp_data"].update(values=EmpdataFetch("PF"))
                 if values["non pf"] == True:
                     Menu["emp_data"].update(values=EmpdataFetch("Non PF"))
@@ -421,118 +412,207 @@ def RegisterFn(Menu, event, values):
                     # Use that image data in order to
                     eMenu["-IMAGE-"].update(data=bio.getvalue())
 
-            if event =="e1":
-                if values[event]!="":
-                    border(eMenu[event],"green")
+            if event == "e1":
+                if values[event] != "":
+                    border(eMenu[event], "green")
                 else:
                     border(eMenu[event], "red")
-
-
-            if event =="e4":
-                if values[event]!="":
+            if event == "e4":
+                if values[event] != "":
                     try:
-                        if int(values[event])/int(values[event])==1:
+                        if int(values[event]) / int(values[event]) == 1:
                             print("hi")
                             if len(values[event]) == 10:
                                 print(len(values[event]))
                                 border(eMenu[event], "green")
+                        if len(values[event]) > 10:
+                            border(eMenu[event], "red")
+                        if len(values[event]) < 10:
+                            border(eMenu[event], None)
                         print("X")
-                    except:
+                    except ValueError:
                         border(eMenu[event], "red")
-                    print("lenght",len(values[event]))
-                    if len(values[event])>10:
+                    print("lenght", len(values[event]))
+            if event == "e5":
+                if values[event] != "":
+                    try:
+                        if int(values[event]) / int(values[event]) == 1:
+                            print("hi")
+                            if len(values[event]) == 10:
+                                print(len(values[event]))
+                                border(eMenu[event], "green")
+                        if len(values[event]) > 10:
+                            border(eMenu[event], "red")
+                        if len(values[event]) < 10:
+                            border(eMenu[event], None)
+                        print("X")
+                    except ValueError:
+                        border(eMenu[event], "red")
+                    print("lenght", len(values[event]))
+            if event == "e6":
+                if values[event] != "":
+                    if values[event].isalnum() == True and len(values[event]) == 10:
+                        border(eMenu[event], "green")
+                    if len(values[event]) > 10:
                         border(eMenu[event], "red")
                     if len(values[event]) < 10:
                         border(eMenu[event], None)
-            if event =="e5":
+            if event == "e7":
+                if values[event] != "":
+                    try:
+                        if int(values[event]) / int(values[event]) == 1:
+                            print("hi")
+                            if len(values[event]) == 12:
+                                print(len(values[event]))
+                                border(eMenu[event], "green")
+                        if len(values[event]) > 12:
+                            border(eMenu[event], "red")
+                        if len(values[event]) < 12:
+                            border(eMenu[event], None)
+                        print("X")
+                    except ValueError:
+                        border(eMenu[event], "red")
+                    print("lenght", len(values[event]))
+            if event == "e8":
+                if values[event] != "":
+                    border(eMenu[event], "green")
+                else:
+                    border(eMenu[event], "red")
+            if event == "e9":
+                if values[event] != "":
+                    border(eMenu[event], "green")
+                else:
+                    border(eMenu[event], "red")
+            if event == "e10":
                 try:
-                    if int(values[event]) / int(values[event]) == 1:
-                        print("hi")
-                        if len(values[event]) == 10:
-                            print(len(values[event]))
+                    if values[event] != "":
+                        if float(values[event]) / float(values[event]) == 1:
                             border(eMenu[event], "green")
-                    print("X")
-                except:
+                    if values[event] == "":
+                        border(eMenu[event], None)
+                except ValueError:
                     border(eMenu[event], "red")
-                print("lenght", len(values[event]))
-                if len(values[event]) > 10:
+            if event == "e11":
+                try:
+                    if values[event] != "":
+                        if float(values[event]) / float(values[event]) == 1:
+                            border(eMenu[event], "green")
+                    if values[event] == "":
+                        border(eMenu[event], None)
+                except ValueError:
                     border(eMenu[event], "red")
-                if len(values[event]) < 10:
-                    border(eMenu[event], None)
-            if event =="e6":
-                if values[event]!="":
-                    if values[event].isalnum()==True and len(values[event])==10:
-                        border(eMenu[event], "green")
-                    if len(values[event])>10:
-                        border(eMenu[event], "red")
-                    else:
-                        border(eMenu[event], "red")
-            if event =="e7":
-                if values[event]!="":
-                    if values[event] is int and len(values[event])==12:
-                        border(eMenu[event], "green")
-                    if len(values[event])>12:
-                        border(eMenu[event], "red")
-                    else:
-                        border(eMenu[event], "red")
-            if event =="e8":
-                if values[event]!="":
-                    border(eMenu[event],"green")
-                else:
+            if event == "e12":
+                try:
+                    if values[event] != "":
+                        if float(values[event]) / float(values[event]) == 1:
+                            border(eMenu[event], "green")
+                    if values[event] == "":
+                        border(eMenu[event], None)
+                except ValueError:
                     border(eMenu[event], "red")
-            if event =="e9":
-                if values[event]!="":
-                    border(eMenu[event],"green")
-                else:
+            if event == "e13":
+                try:
+                    if values[event] != "":
+                        if float(values[event]) / float(values[event]) == 1:
+                            border(eMenu[event], "green")
+                    if values[event] == "":
+                        border(eMenu[event], None)
+                except ValueError:
                     border(eMenu[event], "red")
-            if event =="e10":
+            if event == "e14":
+
                 if values[event] != "":
-                    if values[event] is float:
-                        border(eMenu[event], "green")
-                else:
-                    border(eMenu[event], "red")
-            if event =="e11":
-                if values[event] != "":
-                    if values[event] is float:
-                        border(eMenu[event], "green")
-                else:
-                    border(eMenu[event], "red")
-            if event =="e12":
-                if values[event] != "":
-                    if values[event] is float:
-                        border(eMenu[event], "green")
-                else:
-                    border(eMenu[event], "red")
-            if event =="e13":
-                if values[event] != "":
-                    if values[event] is float:
-                        border(eMenu[event], "green")
-                else:
-                    border(eMenu[event], "red")
-            if event =="e14":
-                if values[event]!="":
-                    if values[event] is int and len(values[event])==10:
-                        border(eMenu[event], "green")
-                    if len(values[event])>10:
-                        border(eMenu[event], "red")
-                    else:
+                    try:
+                        if int(values[event]) / int(values[event]) == 1:
+                            print("hi")
+                            if len(values[event]) == 10:
+                                print(len(values[event]))
+                                border(eMenu[event], "green")
+                        if len(values[event]) > 10:
+                            border(eMenu[event], "red")
+                        if len(values[event]) < 10:
+                            border(eMenu[event], None)
+                        print("X")
+                    except ValueError:
                         border(eMenu[event], "red")
 
-            if event =="e15":
-                if values[event]!="":
-                    border(eMenu[event],"green")
+            if event == "e16":
+                if values[event] != "":
+                    if values[event].isalnum() == True:
+                        if len(values[event]) > 8 and len(values[event]) < 19:
+                            border(eMenu[event], "green")
+                    if len(values[event]) > 18:
+                        border(eMenu[event], "red")
+                    if len(values[event]) < 9:
+                        border(eMenu[event], None)
+                    if values[event].isalnum() == False:
+                        border(eMenu[event], "red")
+            if event == "e17":
+                if values[event] != "":
+                    border(eMenu[event], "green")
                 else:
                     border(eMenu[event], "red")
-            if event =="e16":
-                if values[event]!="":
-                    if values[event].isalnum()==True  and 8<len(values[event])<19:
+            if event == "e18":
+                if values[event] != "":
+                    if values[event].isalnum() == True and len(values[event]) == 11:
                         border(eMenu[event], "green")
-                    if len(values[event])<9 and len(values[event])>18:
+                    if len(values[event]) > 11:
                         border(eMenu[event], "red")
-                    else:
+                    if len(values[event]) < 11:
+                        border(eMenu[event], None)
+                    if values[event].isalnum() == False:
+                        border(eMenu[event], "red")
+            if event == "e19":
+                if values[event] != "":
+                    border(eMenu[event], "green")
+                else:
+                    border(eMenu[event], "red")
+            if event == "e20":
+                if values[event] != "":
+                    border(eMenu[event], "green")
+                else:
+                    border(eMenu[event], "red")
+            if event == "e21":
+                if values[event] != "":
+                    border(eMenu[event], "green")
+                else:
+                    border(eMenu[event], "red")
+            if event == "e22":
+                if values[event] != "":
+                    border(eMenu[event], "green")
+                else:
+                    border(eMenu[event], "red")
+            if event == "e23":
+                if values[event] != "":
+                    border(eMenu[event], "green")
+                else:
+                    border(eMenu[event], "red")
+            if event == "e24":
+                if values[event] != "":
+                    border(eMenu[event], "green")
+                else:
+                    border(eMenu[event], "red")
+            if event == "e25":
+                if values[event] != "":
+                    try:
+                        if int(values[event]) / int(values[event]) == 1:
+                            print("hi")
+                            if len(values[event]) == 10:
+                                print(len(values[event]))
+                                border(eMenu[event], "green")
+                        if len(values[event]) > 10:
+                            border(eMenu[event], "red")
+                        if len(values[event]) < 10:
+                            border(eMenu[event], None)
+                        print("X")
+                    except ValueError:
                         border(eMenu[event], "red")
 
-
+            if event == "e26":
+                if values[event] != "":
+                    border(eMenu[event], "green")
+                else:
+                    border(eMenu[event], "red")
 
             if event == "load simg":
                 filename = values["e21"]
@@ -556,19 +636,19 @@ def RegisterFn(Menu, event, values):
                     # Use that image data in order to
                     eMenu["-IMAGE3-"].update(data=bio.getvalue())
 
-            if event=="pf":
+            if event == "pf":
                 eMenu["e2"].update(value=Emp_code_Gen("PF"))
 
-            if event =="non pf":
+            if event == "non pf":
                 eMenu["e2"].update(value=Emp_code_Gen("Non PF"))
 
-            if event =="yes":
+            if event == "yes":
                 eMenu["e11"].update(disabled=False)
                 eMenu["e12"].update(disabled=False)
                 eMenu["e13"].update(disabled=False)
-                eMenu["e10"].update(disabled=True,value=0.00)
+                eMenu["e10"].update(disabled=True, value=0.00)
 
-            if event =="no":
+            if event == "no":
                 eMenu["e11"].update(disabled=True, value=0.00)
                 eMenu["e12"].update(disabled=True, value=0.00)
                 eMenu["e13"].update(disabled=True, value=0.00)
@@ -598,9 +678,9 @@ def RegisterFn(Menu, event, values):
             if event == 'update employee':
                 Update_Employee(event, values)
             if event == "load pimg":
-                filename = values["u25"]
+                filename = values["u22"]
                 if os.path.exists(filename):
-                    image = Image.open(values["u25"])
+                    image = Image.open(values["u22"])
                     image.thumbnail((300, 300))
                     bio = io.BytesIO()
                     # Actually store the image in memory in binary
@@ -609,9 +689,9 @@ def RegisterFn(Menu, event, values):
                     uMenu["-IMAGE-"].update(data=bio.getvalue())
 
             if event == "load simg":
-                filename = values["u26"]
+                filename = values["u23"]
                 if os.path.exists(filename):
-                    image = Image.open(values["u26"])
+                    image = Image.open(values["u23"])
                     image.thumbnail((300, 300))
                     bio = io.BytesIO()
                     # Actually store the image in memory in binary
@@ -619,9 +699,9 @@ def RegisterFn(Menu, event, values):
                     # Use that image data in order to
                     uMenu["-IMAGE2-"].update(data=bio.getvalue())
             if event == "load nimg":
-                filename = values["u29"]
+                filename = values["u26"]
                 if os.path.exists(filename):
-                    image = Image.open(values["u29"])
+                    image = Image.open(values["u26"])
                     image.thumbnail((300, 300))
                     bio = io.BytesIO()
                     # Actually store the image in memory in binary
