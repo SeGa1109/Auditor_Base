@@ -2,61 +2,64 @@ from Env import *
 
 def Master_User_GUI():
 
-    layout_1=[[ms.Text("Master User"),ms.Sizer(20,0),ms.Button("Add",key="add_user")],
-              [ms.Frame("Master User",
-                        [[ms.Table(values=MUWFetch(),
-                                   headings=["UID", "Name", "Password"],
-                                   justification='centre', enable_events=True, auto_size_columns=False,
-                                   row_height=50,num_rows=10,
-                                   col_widths=[10, 20, 20],
-                                   right_click_selects=True,
-                                   right_click_menu=[[], ["Remove "]],
-                                   enable_click_events=True, size=(swi - 100, shi - 300), key="user_data",
-                                   font=fstyle)]],
-                        font=fstyle, element_justification='center')],
-              [ms.Frame("Adding Mater_User", [
-                  [ms.Text("Name", size=(20, 1)), ms.Sizer(45, 0),ms.Text("Password", size=(20, 1))],
-                  [ms.Input("", size=(20, 1), do_not_clear=False, key='u_name', font=fstyle), ms.Sizer(5, 0),
-                   ms.Input("", size=(20, 1), do_not_clear=False, key='u_password', font=fstyle),
-                   ms.Button("Add", font=fstyle, key="add_user1")]], visible=False, key="add_user2")]]
-    layout_2=[[ms.Text("Work Discription"),ms.Sizer(20,0),ms.Button("Add",key="add_wrkdsp")],
-              [ms.Frame("Work Discription",
-                        [[ms.Table(values=CCWORKFetch(),
-                                   headings=["WID","Discription", "Amount"],
-                                   justification='centre', enable_events=True, auto_size_columns=False,
-                                   row_height=30,num_rows=10,
-                                   col_widths=[10, 50,20],
-                                   right_click_selects=True,
-                                   right_click_menu=[[], [" Remove"]],
-                                   enable_click_events=True, size=(swi - 100, shi - 300), key="wrk_data",
-                                   font=fstyle)]],
-                font=fstyle, element_justification='center')],
-              [ms.Frame("Adding Work", [
-                  [ms.Text("Discription", size=(20, 1)),ms.Text("Amount", size=(20, 1))],
-                  [ms.Multiline("", size=(30, 3), do_not_clear=False, key='cc_wrk', font=fstyle),
-                   ms.Input("", size=(20, 1), do_not_clear=False, key='amount', font=fstyle),
-                   ms.Button("Add", font=fstyle, key="add_wdsp")]], visible=False, key="add_discription")]]
-    layout_3 = [[ms.Text("Mail list"), ms.Sizer(20, 0), ms.Button("Add", key="add_mail")],
-                [ms.Frame("Mail list",
-                          [[ms.Table(values=MAILFetch(),
-                                     headings=["UID","Name","Designation","Mai ID"],
-                                     justification='centre', enable_events=True, auto_size_columns=False,
-                                     row_height=30,
-                                     col_widths=[10, 20, 20, 20],
-                                     right_click_selects=True,
-                                     num_rows=10,
-                                     right_click_menu=[[], [" Remove "]],
-                                     enable_click_events=True, size=(swi - 100, shi - 300), key="mail_data",
-                                     font=fstyle)]],
-                          font=fstyle, element_justification='center')],
-                [ms.Frame("Adding Mail_User", [
-                    [ms.Text("Name", size=(20, 1)),ms.Text("Designation", size=(20, 1)), ms.Text("Mail ID", size=(20, 1))],
-                    [ms.Input("", size=(20, 1), do_not_clear=False, key='ml_name', font=fstyle),
-                     ms.Input("", size=(20, 1), do_not_clear=False, key='designation', font=fstyle),
-                     ms.Input("", size=(20, 1), do_not_clear=False, key='mail_id', font=fstyle),
-                     ms.Button("Add", font=fstyle, key="add_mail_list")]], visible=False, key="add_mail_user")]]
-    layout=[[ms.TabGroup([[ms.Tab("Master User",layout_1)],[ms.Tab("Work Discription",layout_2)],[ms.Tab("Mail ID",layout_3)]])]]
-    return layout
+        layout_1=[[ms.Sizer((swi - 150)/2, 0),ms.Button("Add",key="add_user"),ms.Sizer((swi - 150)/2, 0)],
+                  [ms.Frame("User Data",
+                            [[ms.Table(values=MUWFetch(),
+                                       headings=["UID", "Name", "Password"],
+                                       justification='centre', enable_events=True, auto_size_columns=False,
+                                       row_height=30,num_rows=15,
+                                       col_widths=[20, 40, 40],
+                                       right_click_selects=True,
+                                       right_click_menu=[[], ["Remove "]],
+                                       enable_click_events=True, size=(swi - 100, shi - 300), key="user_data",
+                                       font=fstyle)]],
+                            font=fstyle, element_justification='center')],
+                  [ms.Frame("Adding Mater_User", [
+                      [ms.Text("Name", size=(20, 1)), ms.Sizer(45, 0),ms.Text("Password", size=(20, 1))],
+                      [ms.Input("", size=(20, 1), do_not_clear=False, key='u_name', font=fstyle), ms.Sizer(5, 0),
+                       ms.Input("", size=(20, 1), do_not_clear=False, key='u_password', font=fstyle),
+                       ms.Button("Add", font=fstyle, key="add_user1")]], visible=False, key="add_user2")]]
+        layout_2=[[ms.Sizer((swi - 150)/2, 0),ms.Button("Add",key="add_wrkdsp"),ms.Sizer((swi - 150)/2, 0)],
+                  [ms.Frame("Work Discription",
+                            [[ms.Table(values=CCWORKFetch(),
+                                       headings=["WID","Discription", "Amount"],
+                                       justification='centre', enable_events=True, auto_size_columns=False,
+                                       row_height=30,num_rows=15,
+                                       col_widths=[20, 80,50],
+                                       right_click_selects=True,
+                                       right_click_menu=[[], [" Remove"]],
+                                       enable_click_events=True, size=(swi - 100, shi - 300), key="wrk_data",
+                                       font=fstyle)]],
+                    font=fstyle, element_justification='center')],
+                  [ms.Frame("Adding Work", [
+                      [ms.Text("Discription", size=(20, 1)), ms.Sizer(360, 0),ms.Text("Amount", size=(20, 1))],
+                      [ms.Multiline("", size=(50, 2), do_not_clear=False, key='cc_wrk', font=fstyle),
+                       ms.Input("", size=(20, 1), do_not_clear=False, key='amount', font=fstyle),
+                       ms.Button("Add", font=fstyle, key="add_wdsp")]], visible=False, key="add_discription")]]
+        layout_3 = [[ms.Sizer((swi - 150)/2, 0), ms.Button("Add", key="add_mail"),ms.Sizer((swi - 150)/2, 0)],
+                    [ms.Frame("Mail list",
+                              [[ms.Table(values=MAILFetch(),
+                                         headings=["UID","Name","Designation","Mai ID"],
+                                         justification='centre', enable_events=True, auto_size_columns=False,
+                                         row_height=30,
+                                         col_widths=[20, 45, 40, 45],
+                                         right_click_selects=True,
+                                         num_rows=15,
+                                         right_click_menu=[[], [" Remove "]],
+                                         enable_click_events=True, size=(swi - 100, shi - 300), key="mail_data",
+                                         font=fstyle)]],
+                              font=fstyle, element_justification='center')],
+                    [ms.Frame("Adding Mail_User", [
+                        [ms.Text("Name", size=(20, 1)), ms.Sizer(95, 0),ms.Text("Designation", size=(20, 1)), ms.Sizer(45, 0), ms.Text("Mail ID", size=(20, 1))],
+                        [ms.Input("", size=(25, 1), do_not_clear=False, key='ml_name', font=fstyle),
+                         ms.Input("", size=(20, 1), do_not_clear=False, key='designation', font=fstyle),
+                         ms.Input("", size=(25, 1), do_not_clear=False, key='mail_id', font=fstyle),
+                         ms.Button("Add", font=fstyle, key="add_mail_list")]], visible=False, key="add_mail_user")]]
+        layout=[[ms.TabGroup([[ms.Tab("User Details",layout_1,element_justification='center')],
+                              [ms.Tab("Work Discription",layout_2,element_justification='center')],
+                              [ms.Tab("Mail ID",layout_3,element_justification='center')]],size=(swi-50,shi-50))]]
+        return layout
+
 
 def Master_User(Menu,event,values):
     if event =="add_user":
@@ -96,6 +99,8 @@ def Master_User(Menu,event,values):
             mycursor.execute("DELETE FROM user_details WHERE UID='%s'" % remove_data(Menu,"user_data",values)[0][0])
             mydb.commit()
             Menu["user_data"].update(values=MUWFetch())
+        else:
+            ms.popup_auto_close("Wrong Password",no_titlebar=True, auto_close_duration=2)
     if event == " Remove":
         chk = ms.popup_ok("Please Confirm to Delete", font=fstyle)
         if chk == "OK":
@@ -110,10 +115,11 @@ def Master_User(Menu,event,values):
             Menu["mail_data"].update(values=MAILFetch())
 
 
-Menu = ms.Window("Add Employee", [[ms.Column(Master_User_GUI(), scrollable=True, size=(960, 700), element_justification='centre')]], finalize=True)
+'''Menu = ms.Window("Add Employee", [[ms.Column(Master_User_GUI(), scrollable=True, size=(960, 700), element_justification='centre')]], finalize=True)
 while True:
     event, values = Menu.read()
     if event == ms.WIN_CLOSED:
         Menu.close()
         break
     Master_User(Menu, event, values)
+'''

@@ -39,7 +39,7 @@ todatestr=todate.strftime("%Y-%m-%d")
 todatenf=todate.strftime("%d-%m-%Y")
 todatemy=todate.strftime("%m-%Y")
 file_types = [("JPEG (*.jpg)", "*.jpg"),("All files (*.*)", "*.*")]
-def border(element, color=None, width=3):
+def border(element, color, width=3):
     if color is None:
         color = ms.theme_background_color()
     element.Widget.configure(highlightcolor=color, highlightbackground=color,
@@ -172,12 +172,15 @@ def wage_fetch():
 wage_fetch()
 def user_pass(name):
     sql = "select user_password from user_details where `user_name`='%s'" % name
+    print(sql)
     mycursor.execute(sql)
+
     return [list(x) for x in mycursor.fetchall()]
+
 def user_name():
     sql="select user_name from user_details"
     mycursor.execute(sql)
-    return [list(x) for x in mycursor.fetchall()]
+    return [x for x in mycursor.fetchall()]
 
 def remove_data(Menu,event,values):
     if event == "user_data"or 'wrk_data' or 'mail_data':

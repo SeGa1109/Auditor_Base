@@ -132,16 +132,16 @@ def AttendancePushFn(Menu,event,values):
             Menu['atpnpf'].update(visible=True)
 
     if event == 'atpupdate':
-       if values['atppw']==user_pass(values['atpers']):
+       print(values['atpers'])
+       print("ckecking", user_pass(values['atpers'])[0][0])
+       if values['atppw']==user_pass(values['atpers'])[0][0]:
            pushdate = list(values['atpdate'].split("-"))
            DB_Creation(values['atpdate'])
            mycursor.execute(
                "select `%s` from %s_%s where empcode = 'counter'" % (pushdate[0], pushdate[1], pushdate[2]))
            counter = mycursor.fetchall()[0][0]
-           mycursor.execute(
-               "INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')" \
-               % (todate.strftime("%Y/%m/%d %H:%M:%S"), values["atpers"],
-                  datetime.strptime(values['atpdate'], "%d-%m-%Y").strftime("%Y-%m-%d"), "C"))
+           mycursor.execute("INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')" \
+               % (todate.strftime("%Y/%m/%d %H:%M:%S"), values["atpers"][0], datetime.strptime(values['atpdate'], "%d-%m-%Y").strftime("%Y-%m-%d"), "C"))
            mydb.commit()
            if counter != None:
                chk1 = ms.popup_get_text(

@@ -427,27 +427,38 @@ def RegisterFn(Menu, event, values):
                 else:
                     border(eMenu[event], "red")
 
-            if event =="e3":
-                if values[event]!="":
-                    border(eMenu[event],"green")
-                else:
-                    border(eMenu[event], "red")
+
             if event =="e4":
                 if values[event]!="":
-                    if values[event] is int and len(values[event])==10:
-                        border(eMenu[event], "green")
+                    try:
+                        if int(values[event])/int(values[event])==1:
+                            print("hi")
+                            if len(values[event]) == 10:
+                                print(len(values[event]))
+                                border(eMenu[event], "green")
+                        print("X")
+                    except:
+                        border(eMenu[event], "red")
+                    print("lenght",len(values[event]))
                     if len(values[event])>10:
                         border(eMenu[event], "red")
-                    else:
-                        border(eMenu[event], "red")
+                    if len(values[event]) < 10:
+                        border(eMenu[event], None)
             if event =="e5":
-                if values[event]!="":
-                    if values[event] is int and len(values[event])==10:
-                        border(eMenu[event], "green")
-                    if len(values[event])>10:
-                        border(eMenu[event], "red")
-                    else:
-                        border(eMenu[event], "red")
+                try:
+                    if int(values[event]) / int(values[event]) == 1:
+                        print("hi")
+                        if len(values[event]) == 10:
+                            print(len(values[event]))
+                            border(eMenu[event], "green")
+                    print("X")
+                except:
+                    border(eMenu[event], "red")
+                print("lenght", len(values[event]))
+                if len(values[event]) > 10:
+                    border(eMenu[event], "red")
+                if len(values[event]) < 10:
+                    border(eMenu[event], None)
             if event =="e6":
                 if values[event]!="":
                     if values[event].isalnum()==True and len(values[event])==10:
