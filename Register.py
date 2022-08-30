@@ -607,7 +607,6 @@ def RegisterFn(Menu, event, values):
                         print("X")
                     except ValueError:
                         border(eMenu[event], "red")
-
             if event == "e26":
                 if values[event] != "":
                     border(eMenu[event], "green")
@@ -669,7 +668,9 @@ def RegisterFn(Menu, event, values):
         print(crow[0][0])
         a=crow[0][0]
         print("a",a)
-        uMenu = ms.Window("Update Employee", [[ms.Column( Employee_update_GUI(a), scrollable=True, size=(760, 700), element_justification='centre')]])
+        uMenu = ms.Window("Update Employee",[[ms.Column( Employee_update_GUI(a),
+                                                          scrollable=True, size=(760, 700),
+                                                          element_justification='centre')]])
         while True:
             event, values = uMenu.read()
             if event == ms.WIN_CLOSED:

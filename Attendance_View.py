@@ -24,7 +24,7 @@ def AttendanceViewLay():
     #print(data)
     #print(atnvwdata)
     layout=[[ms.Sizer(swi-1500),ms.Text("Attendance View",font=fstylehd,justification='center')],
-            [ms.Combo(['Attendance','OT','Expenses','Atn+ot'],default_value="Attendance",
+            [ms.Combo(['Attendance','OT','Expenses','Atn+ot','DP_List'],default_value="Attendance",
                       enable_events=True, key='atnvwfltr',size=(15,4),font=fstyle),ms.Sizer(swi -500),
              ms.Text("Date",font=fstyle,size=(7,1)),ms.Input(todatemy,disabled= True,enable_events=True, size=(8,2),font=fstyle,key='atvwdate'),
              ms.CalendarButton(" ",target='atvwdate',format="%m-%Y")],
@@ -44,13 +44,14 @@ while True:
 
 def AttendaceViewFn(Menu,event,values):
     if event == 'atnvwfltr':
+
         Menu['TL_Atview'].update(values=datasplit(copy.deepcopy(atnvwdata),values['atnvwfltr']))
 
     if event == 'atvwdate':
         globals()['atnvwdata'] = attendance_fetch(values['atvwdate'])
         Menu['TL_Atview'].update(values=datasplit(copy.deepcopy(atnvwdata), values['atnvwfltr']))
 
-    if event=='wcxlexp':
+    if event == 'wcxlexp':
         data=attendance_fetch(values['atvwdate'])
         xl=openpyxl.load_workbook(filename=r'C:\Twink_06MA\Master_Files\Atn_Exp.xlsx')
         for step in ['Attendance','OT','Expenses']:
@@ -68,10 +69,6 @@ def AttendaceViewFn(Menu,event,values):
 
         xl.save(filename=r'C:\Twink_06MA\Master_Files\Atn_ExpT1.xlsx')
         os.system(r'C:\Twink_06MA\Master_Files\Atn_ExpT1.xlsx')
-
-
-
-
 
 
 

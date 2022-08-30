@@ -23,9 +23,9 @@ BaseLayout=[[ms.Sizer(swi/2-170,0) ,ms.Text("SUNIL INDUSTRIES LIMITED",font=fsty
 layout=[[ms.Menu    (MenuDef, key='MENU',font=fstyle)],
         [
         ms.Column  (BaseLayout,key="base",visible=False,size=(swi,shi),element_justification='center'),
-        ms.Column  (Register.RegsiterLay(),key='register',visible=True,size=(swi,shi),element_justification='center'),
+        ms.Column  (Register.RegsiterLay(),key='register',visible=False,size=(swi,shi),element_justification='center'),
         ms.Column  (Master_User.Master_User_GUI(),key='mumneu',visible=False,size=(swi,shi),element_justification='center'),
-        ms.Column  (Attendance_Push.AttendancePushLay(),key='atnpush',visible=False,size=(swi,shi),element_justification='center'),
+        ms.Column  (Attendance_Push.AttendancePushLay(),key='atnpush',visible=True,size=(swi,shi),element_justification='center'),
         ms.Column  (Attendance_View.AttendanceViewLay(),key='atnview',visible=False,size=(swi,shi),element_justification='center'),
         ms.Column  (Wage_Calc.WageCalcLay(),key='wagecalc',visible=False,size=(swi,shi),element_justification='center')
         ]]
@@ -63,7 +63,7 @@ while True:
 
     if event == 'Master User':
         chk = ms.popup_get_text("Enter password to enter Master User ", password_char='*', size=(20, 1), font=fstyle,
-                                no_titlebar=True, keep_on_top=True)
+                                 keep_on_top=True)
         if chk == "AstA_SIL":
             for i in MenuList:
                 Menu[i].update(visible=False)
@@ -77,8 +77,6 @@ while True:
         for i in MenuList:
             Menu[i].update(visible=False)
         Menu['wagecalc'].update(visible=True)
-
-
 
     Register.RegisterFn(Menu,event,values)
     Attendance_Push.AttendancePushFn(Menu,event,values)

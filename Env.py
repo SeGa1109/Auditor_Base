@@ -19,12 +19,14 @@ mydb.commit
 
 mycursor.execute("select value from nrdb order by description")
 nrdb_data=list(sum(mycursor.fetchall(),()))
-print(nrdb_data)
+MasterPass=nrdb_data[2]
+#print(MasterPass)
 shi=GetSystemMetrics(1)-100
 swi=GetSystemMetrics(0)
 
 fstyle=(nrdb_data[0],int(nrdb_data[1]))
 fstylehd=(nrdb_data[0],int(nrdb_data[1])+2)
+del nrdb_data
 file_types = [("JPEG (*.jpg)", "*.jpg"),("All files (*.*)", "*.*")]
 os.chdir('C:\ERP\Icons')
 with open("choose.png", "rb") as image_file:
@@ -52,7 +54,6 @@ def MAILFetch():
 def CCWORKFetch():
     mycursor.execute("select * from cc_work_list")
     return ([list(x) for x in mycursor.fetchall()])
-
 
 def MUWFetch():
     mycursor.execute("select * from user_details")
@@ -123,12 +124,24 @@ def datasplit(data,filter):
                     part[i]=temp[2]
                 else:
                     pass
-    elif filter =='Atn+ot':
+    elif filter == 'Atn+ot':
         for part in data:
             for i in range(3,len(part)):
                 if part[i]!=None:
                     temp=list(part[i].split(","))
                     part[i]=str(temp[0])+";",str(temp[1])
+                else:
+                    pass
+    elif filter == 'DP_List':
+        mycursor.execute("select UID,Description from dep_list")
+        db_data = mycursor.fetchall()
+        dplist = {int(x[0]): (x[1]) for x in db_data}
+        print(dplist)
+        for part in data:
+            for i in range(3,len(part)):
+                if part[i]!=None:
+                    temp=list(part[i].split(","))
+                    part[i]=dplist.get(int(temp[3]))[:2]
                 else:
                     pass
     return data
@@ -170,6 +183,7 @@ def wage_fetch():
     return dict_data
 
 wage_fetch()
+
 def user_pass(name):
     sql = "select user_password from user_details where `user_name`='%s'" % name
     print(sql)
@@ -180,13 +194,14 @@ def user_pass(name):
 def user_name():
     sql="select user_name from user_details"
     mycursor.execute(sql)
-    return [x for x in mycursor.fetchall()]
+    return list(sum(mycursor.fetchall(),()))
 
 def remove_data(Menu,event,values):
     if event == "user_data"or 'wrk_data' or 'mail_data':
         data = Menu[event].get()
         inx = [data[row] for row in values[event]]
     return inx
+
 def Emp_code_Gen(type):
         if type=="PF":
             mycursor.execute("SELECT emp_code FROM register WHERE emp_code LIKE 'SIL0%'")
@@ -197,3 +212,10 @@ def Emp_code_Gen(type):
             mycursor.execute("SELECT emp_code FROM register WHERE emp_code LIKE 'SILTEMP%'")
             db_data=mycursor.fetchall()
             return "SILTEMP" + str((int("0" if (db_data)==None else str(len(db_data))) + 1)).zfill(3)
+
+def DepListFetch():
+    mycursor.execute("select * from dep_list")
+    return ([list(x) for x in mycursor.fetchall()])
+
+mycursor.execute("select description from dep_list")
+dep_list=list(sum(mycursor.fetchall(),()))

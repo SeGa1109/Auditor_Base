@@ -35,8 +35,10 @@ def WageCalcFn(Menu,event,values):
             for i in range (3):#EMP Details addition
                 temp.append(step[i])
             chk = list(step[3].split(","))#Shift Check
+            print(chk)
             if chk[0] not in ['P','A']:# if Emp is Shift resource
                 wagetemp=wagedata.get(step[0])
+                print(wagetemp)
                 temp.append("NA")
                 S1,S2,S3,OT=0,0,0,0
                 CE=0.0
@@ -97,5 +99,6 @@ def WageCalcFn(Menu,event,values):
             netwage=gross_wage-PF-ESI-ADV-CE
             temp.append(netwage)
             wage_proc_data.append(temp)
+
         Menu['TL_WC'].update(values=wage_proc_data)
 
