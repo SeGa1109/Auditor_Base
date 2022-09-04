@@ -147,19 +147,23 @@ def datasplit(data,filter):
     return data
 
 def attendance_fetch(inp):
+
     form = list(inp.split("-"))
-    mycursor.execute("select register.employee_name,register.f_sp_name, %s_%s.* "
+    mycursor.execute("select register.employee_name,register.f_sp_name,register.office_staff, %s_%s.* "
                      "from register inner join %s_%s on register.emp_code = %s_%s.empcode" % (
                      form[0], form[1], form[0], form[1], form[0], form[1]))
     db_data = [list(x) for x in mycursor.fetchall()]
-    #print(db_data)
+    print(db_data)
     for i in range(len(db_data)):
-        # print(db_data[i])
-        db_data[i].insert(0, db_data[i][2])
-        del db_data[i][3]
+        print("j",db_data[i])
+        db_data[i].insert(0, db_data[i][3])
+        print("l", db_data[i])
+        del db_data[i][4]
+        print("m", db_data[i])
     return db_data
 
 def wage_fetch():
+
     mycursor.execute("Select emp_code,base_salary from register where shift_work='No' ")
     db_data=[list(x) for x in mycursor.fetchall()]
     #print(db_data)
@@ -177,7 +181,6 @@ def wage_fetch():
         temp.append(temp1)
         output.append(temp)
     dict_data_SY= {x[0]:x[1] for x in output}
-
     dict_data.update(dict_data_SY)
     print(dict_data)
     return dict_data

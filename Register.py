@@ -21,8 +21,8 @@ def RegsiterLay():
 
     return layout
 
-
 def RegisterFn(Menu, event, values):
+
     def Cleaning_Crew_GUI():
         layout = [[ms.Text("Cleaning Crew Register", font=fstylehd)],
                   [ms.Sizer(swi - 900, 0),
@@ -123,8 +123,8 @@ def RegisterFn(Menu, event, values):
              ],
             [ms.Text("ET :", justification='left', size=(20, 1), font=fstyle, ),
              ms.Radio("PF","etype", size=(5, 1),enable_events=True, key='pf', font=fstyle),
-             ms.Radio("Non PF","etype", size=(6, 1),enable_events=True, key='non pf', font=fstyle)
-             ],
+             ms.Radio("Non PF","etype", size=(6, 1),enable_events=True, key='non pf', font=fstyle),ms.Sizer(10,0),
+             ms.Checkbox("office_staff",key="o_staff",font=fstyle)],
         ]
         Employee_Image = [[ms.Image(key="-IMAGE-")]]
         Signature_Image = [[ms.Image(key="-IMAGE2-")]]
@@ -169,7 +169,7 @@ def RegisterFn(Menu, event, values):
                         'ifsc_code': values['e18'],'branch': values['e19'],'date_of_birth': values['e20'],
                         'date_of_join': values['e21'],'photo': image_data_ep,'signature': image_data_sp,
                         'nominee_name': values['e24'],'nominee_phone_no': values['e25'],'nominee_photo':image_data_np,
-                        'ET':"PF" if values['pf']==True else "Non PF"}
+                        'ET':"PF" if values['pf']==True else "Non PF",'office_staff':'yes'if values["o_staff"]==True else 'no'}
 
                 placeholders = ', '.join(['%s'] * len(dict))
                 columns = ', '.join(dict.keys())

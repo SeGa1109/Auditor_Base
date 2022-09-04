@@ -59,6 +59,7 @@ def AttendancePushLay():
         datalist.append([sub1])
 
 #---------------------------------------------------------------------
+
     mycursor.execute(
         'select UID,emp_code,employee_name,f_sp_name from register where active_status = "Y" and ET = "NON PF" and shift_work = "Yes"')
     globals()['emplistny'] = [list(x) for x in mycursor.fetchall()]
@@ -111,8 +112,6 @@ def AttendancePushLay():
 
 #----------------------
 
-
-
     layout=[
         [ms.Text("Attendance Register",font=fstylehd)],
         [ms.Text("Entry Person",font=fstyle,size=(12,1)),ms.Combo(values=user_name(),font=fstyle,size=(20,1),key='atpers'),ms.Sizer(swi-650,0),
@@ -130,7 +129,6 @@ def AttendancePushLay():
 '''
 TestMenu = ms.Window("Attendance Push",layout,location=(0,0),size=(swi,shi),element_justification='center')
 while True:
-
     event,values=TestMenu.read()
     if event == ms.WIN_CLOSED:
         TestMenu.close()
@@ -268,16 +266,3 @@ def AttendancePushFn(Menu,event,values):
 
        else:
            ms.popup_auto_close("Wrong Password", auto_close_duration=1)
-
-
-
-
-
-
-
-
-
-
-
-
-

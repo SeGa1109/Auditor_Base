@@ -25,7 +25,8 @@ def WageCalcFn(Menu,event,values):
     if event == 'wcgen':
         incentive_chk=int(ms.popup_get_text("Enter the number of days for incentive addition",no_titlebar=True,font=fstyle,location=(30,100)))
         incentive_amnt=float(ms.popup_get_text("Incentive Amount",no_titlebar=True,font=fstyle,location=(30,100)))
-        data = attendance_fetch(values['atvwdate'])
+        data = attendance_fetch(values['wcdateinp'])
+        print(data)
         wagedata = wage_fetch()
         wage_proc_data=[]
         #print(data)
@@ -42,7 +43,7 @@ def WageCalcFn(Menu,event,values):
                 temp.append("NA")
                 S1,S2,S3,OT=0,0,0,0
                 CE=0.0
-                for i in range (3,len(step)):# Custom Shift Calc
+                for i in range (4,len(step)):# Custom Shift Calc
                     i=list(step[i].split(","))
                     if i[0] == '1':
                         S1+=1
@@ -58,7 +59,9 @@ def WageCalcFn(Menu,event,values):
                 wage = (S1*wagetemp[0])+(S2*wagetemp[1])+(S3*wagetemp[2]) # Wage Calc
                 temp.append(wage)
                 ot_wage = (OT / 8 * wagetemp[0])  # OT Calc
-                if S1 + S2 + S3 >= incentive_chk:
+                if step[3] == "yes":
+                    incentive = 0.0
+                elif S1 + S2 + S3 >= incentive_chk:
                     incentive = incentive_amnt
                 else:
                     incentive = 0.0
@@ -66,7 +69,7 @@ def WageCalcFn(Menu,event,values):
                 wagetemp = wagedata.get(step[0])
                 DP,OT=0,0
                 CE = 0.0
-                for i in range(3, len(step)):  # DP Calc
+                for i in range(4, len(step)):  # DP Calc
                     i = list(step[i].split(","))
                     if i[0] == 'P':
                         DP+=1
@@ -79,14 +82,16 @@ def WageCalcFn(Menu,event,values):
                 wage = DP*wagetemp
                 temp.append(wage)
                 ot_wage = (OT / 8 * wagetemp)
-                if DP >= incentive_chk:
+                if step[3]=="yes":
+                    incentive=0.0
+                elif DP >= incentive_chk:
                     incentive = incentive_amnt
                 else:
                     incentive = 0.0
 
             temp.append(OT)
             temp.append(ot_wage)
-            temp.append(incentive)
+            temp.append("NA" if step[3]=="yes" else incentive)
             gross_wage=wage+ot_wage+incentive
             temp.append(gross_wage)
             PF=round(gross_wage*12/100,0)#PF Calculation
