@@ -66,8 +66,11 @@ def CCWFetch():
 def EmpdataFetch(type):
     if type=="PF":
         mycursor.execute("select Emp_code, employee_name,f_sp_name,Gender,Phone_no,base_salary "
-                         "from register where active_status = 'Y' and ET ='PF' ")
-        return ([list(x) for x in mycursor.fetchall()])
+                         "from register where active_status = 'Y' and ET ='PF' and shift_work = 'No' ")
+        S1=[list(x) for x in mycursor.fetchall()]
+        mycursor.execute('select Emp_code, employee_name,f_sp_name,Gender,Phone_no,concat(shift_1_salary,",",shift_2_salary,",",shift_3_salary) from register where active_status = "Y" and ET ="PF" and shift_work = "Yes" ')
+        S2 = [list(x) for x in mycursor.fetchall()]
+        return S1+S2
     if type=="Non PF":
         mycursor.execute("select Emp_code, employee_name,f_sp_name,Gender,Phone_no,base_salary "
                          "from register where active_status = 'Y' and ET ='Non PF' ")
@@ -79,7 +82,7 @@ def DB_Creation(inp):
     mydb.commit()
     try:
         for i in range (1,calendar.monthrange(int(date_split[2]),int(date_split[1]))[1]+1):
-            sql="alter table %s_%s add column (`%s` varchar(10))"%(date_split[1],date_split[2],str(i).zfill((2)))
+            sql="alter table %s_%s add column (`%s` varchar(15))"%(date_split[1],date_split[2],str(i).zfill((2)))
             mycursor.execute(sql)
     except:
         pass
@@ -182,7 +185,7 @@ def wage_fetch():
         output.append(temp)
     dict_data_SY= {x[0]:x[1] for x in output}
     dict_data.update(dict_data_SY)
-    print(dict_data)
+    #print(dict_data)
     return dict_data
 
 wage_fetch()
@@ -222,3 +225,5 @@ def DepListFetch():
 
 mycursor.execute("select description from dep_list")
 dep_list=list(sum(mycursor.fetchall(),()))
+
+DB_Creation("12-08-2022")
