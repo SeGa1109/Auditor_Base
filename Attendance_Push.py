@@ -152,7 +152,7 @@ def AttendancePushFn(Menu,event,values):
            DB_Creation(values['atpdate'])
            mycursor.execute("select `%s` from %s_%s where empcode = 'counter'" % (pushdate[0], pushdate[1], pushdate[2]))
            counter = mycursor.fetchall()[0][0]
-           mycursor.execute("INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')" \
+           mycursor.execute("INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')," \
                % (todate.strftime("%Y/%m/%d %H:%M:%S"), values["atpers"][0], datetime.strptime(values['atpdate'], "%d-%m-%Y").strftime("%Y-%m-%d"), "C"))
            mydb.commit()
            mycursor.execute("select Description,UID from dep_list")

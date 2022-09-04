@@ -7,6 +7,7 @@ import Attendance_View
 import Register
 import Wage_Calc
 import Master_User
+import Cleaning_Crew
 #---Custom DB Declaration
 mycursor.execute('Use Twink_06ma')
 mydb.commit()
@@ -14,7 +15,7 @@ mydb.commit()
 #--- Base Menu Declaration
 MenuDef = [
            ['Navigate',   ['Home','Register','Master User']],
-           ['Attendance', ['Create','View']],
+           ['Attendance', ['Create','View','CC_Attendence','CC_View']],
            ['Reports',    ['Wages']],
 ]
 #--- Base Layout Declaration
@@ -27,7 +28,9 @@ layout=[[ms.Menu    (MenuDef, key='MENU',font=fstyle)],
         ms.Column  (Master_User.Master_User_GUI(),key='mumneu',visible=False,size=(swi,shi),element_justification='center'),
         ms.Column  (Attendance_Push.AttendancePushLay(),key='atnpush',visible=False,size=(swi,shi),element_justification='center'),
         ms.Column  (Attendance_View.AttendanceViewLay(),key='atnview',visible=False,size=(swi,shi),element_justification='center'),
-        ms.Column  (Wage_Calc.WageCalcLay(),key='wagecalc',visible=False,size=(swi,shi),element_justification='center')
+        ms.Column  (Wage_Calc.WageCalcLay(),key='wagecalc',visible=False,size=(swi,shi),element_justification='center'),
+        ms.Column  (Cleaning_Crew.crew_att_gui(),key='cc_att',visible=False,size=(swi,shi),element_justification='center'),
+        #ms.Column  (Wage_Calc.WageCalcLay(),key='wagecalc',visible=False,size=(swi,shi),element_justification='center')
         ]]
 
 MenuList=["base","register",'atnpush','atnview','wagecalc','mumneu']
@@ -61,10 +64,15 @@ while True:
             Menu[i].update(visible=False)
         Menu['atnview'].update(visible=True)
 
+    if event == 'CC_Attendence':
+        for i in MenuList:
+            Menu[i].update(visible=False)
+        Menu['cc_att'].update(visible=True)
+
     if event == 'Master User':
         chk = ms.popup_get_text("Enter password to enter Master User ", password_char='*', size=(20, 1), font=fstyle,
                                  keep_on_top=True)
-        if chk == "AstA_SIL":
+        if chk == MasterPass:
             for i in MenuList:
                 Menu[i].update(visible=False)
             Menu['mumneu'].update(visible=True)
@@ -83,4 +91,5 @@ while True:
     Attendance_View.AttendaceViewFn(Menu,event,values)
     Wage_Calc.WageCalcFn(Menu,event,values)
     Master_User.Master_User(Menu,event,values)
+    Cleaning_Crew.cc_att_(event,values,Menu)
 
