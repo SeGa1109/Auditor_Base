@@ -8,6 +8,7 @@ import Register
 import Wage_Calc
 import Master_User
 import Cleaning_Crew
+import CC_Attendence_View
 #---Custom DB Declaration
 mycursor.execute('Use Twink_06ma')
 mydb.commit()
@@ -30,10 +31,10 @@ layout=[[ms.Menu    (MenuDef, key='MENU',font=fstyle)],
         ms.Column  (Attendance_View.AttendanceViewLay(),key='atnview',visible=False,size=(swi,shi),element_justification='center'),
         ms.Column  (Wage_Calc.WageCalcLay(),key='wagecalc',visible=False,size=(swi,shi),element_justification='center'),
         ms.Column  (Cleaning_Crew.crew_att_gui(),key='cc_att',visible=False,size=(swi,shi),element_justification='center'),
-        #ms.Column  (Wage_Calc.WageCalcLay(),key='wagecalc',visible=False,size=(swi,shi),element_justification='center')
+        ms.Column  (CC_Attendence_View.CC_View_GUI(),key='c_view',visible=False,size=(swi,shi))
         ]]
 
-MenuList=["base","register",'atnpush','atnview','wagecalc','mumneu']
+MenuList=["base","register",'atnpush','atnview','wagecalc','mumneu','c_view','cc_att',]
 
 Menu = ms.Window("Twink_Attendance",layout,location=(0,0),size=(swi,shi),element_justification='center')
 
@@ -69,6 +70,11 @@ while True:
             Menu[i].update(visible=False)
         Menu['cc_att'].update(visible=True)
 
+    if event == 'CC_View':
+        for i in MenuList:
+            Menu[i].update(visible=False)
+        Menu['c_view'].update(visible=True)
+
     if event == 'Master User':
         chk = ms.popup_get_text("Enter password to enter Master User ", password_char='*', size=(20, 1), font=fstyle,
                                  keep_on_top=True)
@@ -92,4 +98,5 @@ while True:
     Wage_Calc.WageCalcFn(Menu,event,values)
     Master_User.Master_User(Menu,event,values)
     Cleaning_Crew.cc_att_(event,values,Menu)
+    CC_Attendence_View.c_view_db(event, values, Menu)
 

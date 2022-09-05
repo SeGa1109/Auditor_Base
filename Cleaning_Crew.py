@@ -39,7 +39,6 @@ def cc_att_(event,values,Menu):
             mycursor.execute("select WID,discription from cc_work_list " )
             dis=[list(x) for x in mycursor.fetchall()]
             for i in range(len(cclistpy)):
-
                 data = []
                 data.append(values['cc_uid' + str(i)])
                 data.append(values["cc_atpdate"])
