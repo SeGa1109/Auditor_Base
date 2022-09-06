@@ -1,3 +1,6 @@
+import base64
+import os
+
 from Env import *
 
 
@@ -79,11 +82,11 @@ def RegisterFn(Menu, event, values):
              ms.Radio("Yes","sw", size=(5, 1),enable_events=True, key='yes', font=fstyle),
              ms.Radio("No","sw", size=(5, 1),enable_events=True, key='no', font=fstyle)],
             [ms.Text("Base salary:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input("0.00", size=(30, 1),disabled=True, enable_events=True,do_not_clear=True, key='e10', font=fstyle)],
+             ms.Input("0.00", size=(30, 1),disabled=True, enable_events=True,do_not_clear=True, key='e10', font=fstyle,disabled_readonly_background_color=ms.theme_background_color())],
             [ms.Text("Shift  salary:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input("0.00", size=(9, 1),tooltip="shift 1 salary",disabled=True, enable_events=True,do_not_clear=True, key='e11', font=fstyle),
-             ms.Input("0.00", size=(9, 1),tooltip="shift 2 salary",disabled=True, enable_events=True,do_not_clear=True, key='e12', font=fstyle),
-             ms.Input("0.00", size=(9, 1),tooltip="shift 3 salary",disabled=True, enable_events=True,do_not_clear=True, key='e13', font=fstyle)],
+             ms.Input("0.00", size=(9, 1),tooltip="shift 1 salary",disabled=True,disabled_readonly_background_color=ms.theme_background_color(), enable_events=True,do_not_clear=True, key='e11', font=fstyle),
+             ms.Input("0.00", size=(9, 1),tooltip="shift 2 salary",disabled=True,disabled_readonly_background_color=ms.theme_background_color(), enable_events=True,do_not_clear=True, key='e12', font=fstyle),
+             ms.Input("0.00", size=(9, 1),tooltip="shift 3 salary",disabled=True, disabled_readonly_background_color=ms.theme_background_color(),enable_events=True,do_not_clear=True, key='e13', font=fstyle)],
             [ms.Text("Phone No:", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input("", size=(30, 1), enable_events=True,do_not_clear=True, key='e14', font=fstyle)],
             [ms.Text("Blood Group:", justification='left', size=(20, 1), font=fstyle, ),
@@ -98,10 +101,10 @@ def RegisterFn(Menu, event, values):
              ms.Input("", size=(30, 1), enable_events=True,do_not_clear=True, key='e19', font=fstyle)],
             [ms.Text("Date of Birth :", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input("", size=(26, 1), enable_events=True,do_not_clear=True, key='e20', font=fstyle),ms.Sizer(4, 0),
-             ms.CalendarButton('Choose',image_data=chse, format='%d-%m-%y', target='e20', font=fstyle, size=(6, 1), key='date1'), ],
+             ms.CalendarButton('Choose',image_data=chse, format='%Y-%m-%d', target='e20', font=fstyle, size=(6, 1), key='date1'), ],
             [ms.Text("Date of Joining :", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input("", size=(26, 1), enable_events=True,do_not_clear=True, key='e21', font=fstyle),ms.Sizer(4, 0),
-             ms.CalendarButton('Choose',image_data=chse, format='%d-%m-%y', font=fstyle, target='e21', size=(6, 1), key='date1'), ],
+             ms.CalendarButton('Choose',image_data=chse, format='%Y-%m-%d', font=fstyle, target='e21', size=(6, 1), key='date1'), ],
             [ms.Text("photo:", justification='left', size=(20, 1), font=fstyle),
              ms.Input("", size=(19, 1), enable_events=True,do_not_clear=True, key='e22', font=fstyle),
              ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="e22",key="b1", font=fstyle),
@@ -124,7 +127,7 @@ def RegisterFn(Menu, event, values):
             [ms.Text("ET :", justification='left', size=(20, 1), font=fstyle, ),
              ms.Radio("PF","etype", size=(5, 1),enable_events=True, key='pf', font=fstyle),
              ms.Radio("Non PF","etype", size=(6, 1),enable_events=True, key='non pf', font=fstyle),ms.Sizer(10,0),
-             ms.Checkbox("office_staff",key="o_staff",font=fstyle)],
+             ms.Checkbox("Office Staff",key="o_staff",font=fstyle)],
         ]
         Employee_Image = [[ms.Image(key="-IMAGE-")]]
         Signature_Image = [[ms.Image(key="-IMAGE2-")]]
@@ -140,8 +143,6 @@ def RegisterFn(Menu, event, values):
         return Employee_Add_GUI
 
     def Add_Employee(event, values):
-
-
         if event == "add employee":
             for i in range(1,27):
                 chk=True
@@ -158,7 +159,6 @@ def RegisterFn(Menu, event, values):
                 filename = str(values['e26'])
                 file = open(filename, 'rb').read()
                 image_data_np = base64.b64encode(file)
-                print( )
 
                 dict = {'employee_name': values['e1'], 'emp_code': values['e2'],'designation':values['e3'],'esic_no':values['e4'],'uan_no':values['e5'],'pan_no': values['e6'],
                         'aadhar_no': values['e7'],'address': values['e8'],'marriage_status':"Yes" if values["m_yes"]==True else "No", 'f_sp_name': values['e9'],
@@ -191,8 +191,9 @@ def RegisterFn(Menu, event, values):
     def Employee_update_GUI(epc):
         mycursor.execute("select * from register where emp_code='%s'" % epc)
         ep_dat= list(mycursor.fetchall())
+
         ep_data=ep_dat[0]
-        print("ep_data",ep_data)
+        #print("ep_data",ep_data)
         if ep_data[9]=="Yes":
             m_val=[True,False]
         else:
@@ -211,14 +212,13 @@ def RegisterFn(Menu, event, values):
             et_val=[True,False]
         elif ep_data[31]=="Non PF":
             et_val=[False,True]
-
         Employee_Details = [
             [ms.Text("Employee Name:", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input(ep_data[1], size=(30, 1), enable_events=True,do_not_clear=True, key='u1', font=fstyle)],
             [ms.Text("Emp Code:", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input(ep_data[2], size=(30, 1),disabled=True, enable_events=True,do_not_clear=True, key='u2', font=fstyle)],
             [ms.Text("Designation:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Combo(ep_data[3],("Worker","Supervisor","Manager"),enable_events=True, size=(29, 1), key='u3', font=fstyle)],
+             ms.Combo(("Worker","Supervisor","Manager"),default_value= ep_data[3],enable_events=True, size=(29, 1), key='u3', font=fstyle)],
             [ms.Text("ESIC NO:", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input(ep_data[4], size=(30, 1), enable_events=True,do_not_clear=True, key='u4', font=fstyle)],
             [ms.Text("UAN NO:", justification='left', size=(20, 1), font=fstyle, ),
@@ -250,7 +250,7 @@ def RegisterFn(Menu, event, values):
             [ms.Text("Phone No:", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input(ep_data[17], size=(30, 1), enable_events=True,do_not_clear=True, key='u14', font=fstyle)],
             [ms.Text("Blood Group:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Combo(ep_data[18],("O+","O-","A+"),enable_events=True, size=(30, 1), key='u15', font=fstyle)],
+             ms.Combo(("O+","O-","A+"),default_value= ep_data[18],enable_events=True, size=(30, 1), key='u15', font=fstyle)],
             [ms.Text("Bank Account Number:", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input(ep_data[19], size=(30, 1), enable_events=True,do_not_clear=True, key='u16', font=fstyle)],
             [ms.Text("Bank Name:", justification='left', size=(20, 1), font=fstyle, ),
@@ -266,12 +266,12 @@ def RegisterFn(Menu, event, values):
              ms.Input(ep_data[24], size=(26, 1), enable_events=True,do_not_clear=True, key='u21', font=fstyle),ms.Sizer(4, 0),
              ms.CalendarButton('Choose',image_data=chse, format='%d-%m-%y', font=fstyle, target='u21', size=(6, 1), key='date1'), ],
             [ms.Text("photo:", justification='left', size=(20, 1), font=fstyle),
-             ms.Input("", size=(19, 1), enable_events=True,do_not_clear=True, key='u22', font=fstyle),
+             ms.Input("C:\Twink_06MA\Temp\Photo.png", size=(19, 1), enable_events=True,do_not_clear=True, key='u22', font=fstyle),
              ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u22",key="b1", font=fstyle),
              ms.Button("Load",image_data=load, font=fstyle,size=(5,1), key="load pimg"), ms.Sizer(2, 0),
              ],
             [ms.Text("Specimen Signature:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input("", size=(19, 1), enable_events=True,do_not_clear=True, key='u23', font=fstyle),
+             ms.Input("C:\Twink_06MA\Temp\Signature.png", size=(19, 1), enable_events=True,do_not_clear=True, key='u23', font=fstyle),
              ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u23",key="b2", font=fstyle),
              ms.Button("Load",image_data=load,size=(5,1), font=fstyle, key="load simg"), ms.Sizer(2, 0),
              ],
@@ -280,7 +280,7 @@ def RegisterFn(Menu, event, values):
             [ms.Text("Nominee Phone No:", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input(ep_data[29], size=(30, 1), enable_events=True,do_not_clear=True, key='u25', font=fstyle)],
             [ms.Text("Nominee photo:", justification='left', size=(20, 1), font=fstyle),
-             ms.Input("", size=(19, 1), enable_events=True,do_not_clear=True, key='u26', font=fstyle),
+             ms.Input(r"C:\Twink_06MA\Temp\Nominee.png", size=(19, 1), enable_events=True,do_not_clear=True, key='u26', font=fstyle),
              ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u26",key="b3", font=fstyle),
              ms.Button("Load",image_data=load,size=(5,1), font=fstyle, key="load nimg"), ms.Sizer(2, 0),
              ],
@@ -289,69 +289,89 @@ def RegisterFn(Menu, event, values):
              ms.Radio("Non PF","etype",default=et_val[1], size=(6, 1),enable_events=True, key='non pf', font=fstyle)
              ],
         ]
-        Employee_Image = [[ms.Image(key="-IMAGE-")]]
-        Signature_Image = [[ms.Image(key="-IMAGE2-")]]
-        Nominee_Image = [[ms.Image(key="-IMAGE3-")]]
+        os.chdir(r'C:\Twink_06MA\Temp')
+        with open("Photo.jpg", "wb") as fh:
+            fh.write(base64.decodebytes(ep_data[26]))
+        with open("Signature.jpg", "wb") as fh:
+            fh.write(base64.decodebytes(ep_data[27]))
+        with open("Nominee.jpg", "wb") as fh:
+            fh.write(base64.decodebytes(ep_data[30]))
+        #---
+        img = Image.open("Photo.jpg")
+        img.save("Photo.png")
+        img = Image.open("Signature.jpg")
+        img.save("Signature.png")
+        img = Image.open("Nominee.jpg")
+        img.save("Nominee.png")
+        with open("Photo.png", "rb") as image_file:
+            Photo = base64.b64encode(image_file.read())
+        with open("Signature.png", "rb") as image_file:
+            Signature = base64.b64encode(image_file.read())
+        with open("Nominee.png", "rb") as image_file:
+            Nominee = base64.b64encode(image_file.read())
+
+        Employee_Image = [[ms.Image(source=Photo, key="-IMAGE-",subsample=3)]]
+        Signature_Image = [[ms.Image(source=Signature,key="-IMAGE2-",size=(170, 100),subsample=10)]]
+        Nominee_Image = [[ms.Image(source=Nominee,key="-IMAGE3-",subsample=3)]]
         Employee_Update_GUI = [[
             ms.Column([[ms.Frame("Employee Details", Employee_Details, font=fstyle)]]),
             ms.Column([
-                [ms.Frame("Employee Photo", [[]] ,size=(170, 200), font=fstyle)],
-                [ms.Frame("Signature",  [[]],size=(170, 100), font=fstyle)],
-                [ms.Frame(" Nominee Photo", [[]], size=(170, 200), font=fstyle)]])],
-            [ms.Button("",[[]], key="update employee", font=fstyle)]]
+                [ms.Frame("Employee Photo", Employee_Image ,size=(200, 240), font=fstyle)],
+                [ms.Frame("Signature",  Signature_Image,size=(200, 100), font=fstyle)],
+                [ms.Frame(" Nominee Photo", Nominee_Image, size=(200, 240), font=fstyle)]])],
+            [ms.Button("Update",key="updateemp", font=fstyle)]]
         return Employee_Update_GUI
 
     def Update_Employee(event, values):
-        if event == "update employee":
-            for i in range(1, 27):
-                chk=True
-                if values['u' + str(i)] == "":
-                    break
-            print(chk)
-            if chk == True:
-                filename = str(values['u22'])
-                file = open(filename, 'rb').read()
-                image_data_ep = base64.b64encode(file)
-                filename = str(values['u23'])
-                file = open(filename, 'rb').read()
-                image_data_sp = base64.b64encode(file)
-                filename = str(values['u26'])
-                file = open(filename, 'rb').read()
-                image_data_np = base64.b64encode(file)
+        print("X")
+        for i in range(1, 27):
+            chk=True
+            if values['u' + str(i)] == "":
+                chk=False
+                break
+        #print(chk)
+        if chk == True:
+            '''
+            filename = str(values['u22'])
+            file = open(filename, 'rb').read()
+            image_data_ep = base64.b64encode(file)
+            filename = str(values['u23'])
+            file = open(filename, 'rb').read()
+            image_data_sp = base64.b64encode(file)
+            filename = str(values['u26'])
+            file = open(filename, 'rb').read()
+            image_data_np = base64.b64encode(file)
+'''
+            dict = {'employee_name': values['u1'],'designation':values['u3'],'esic_no':values['u4'],'uan_no':values['u5'],
+                    'aadhar_no': values['u6'],'address': values['u7'],'marriage_status':'Yes' if values["m_yes"]==True else "No", 'f_sp_name': values['u9'],
+                    'gender':"M" if values['m']==True else "F" if values['f']==True else "O" ,
+                    'shift_work':'Yes' if values["yes"]==True else "No",'base_salary': values['u10'],
+                    'shift_1_salary': values['u11'],'shift_2_salary': values['u12'],'shift_3_salary': values['u13'],
+                    'phone_no': values['u14'],'blood_group':values['u15'],'bank_account_no': values['u16'], 'bank_name': values['u17'],
+                    'ifsc_code': values['u18'],'branch': values['u19'],'date_of_birth': values['u20'],
+                    'date_of_join': values['u21'],
+                    'nominee_name': values['u24'],'nominee_phone_no': values['u25'],
+                    'ET':"PF" if values['pf']==True else "Non PF"}
 
-                dict = {'employee_name': values['u1'],'designation':values['u3'],'esic_no':values['u4'],'uan_no':values['u5'],
-                        'aadhar_no': values['u6'],'address': values['u7'],'marriage_status':'Yes' if values["m_yes"]==True else "No", 'f_sp_name': values['u9'],
-                        'gender':"M" if values['m']==True else "F" if values['f']==True else "O" ,
-                        'shift_work':'Yes' if values["yes"]==True else "No",'base_salary': values['u10'],
-                        'shift_1_salary': values['u11'],'shift_2_salary': values['u12'],'shift_3_salary': values['u13'],
-                        'phone_no': values['u14'],'blood_group':values[15],'bank_account_no': values['u16'], 'bank_name': values['u17'],
-                        'ifsc_code': values['u18'],'branch': values['u19'],'date_of_birth': values['u20'],
-                        'date_of_join': values['u21'],'photo': image_data_ep,'signature': image_data_sp,
-                        'nominee_name': values['u24'],'nominee_phone_no': values['u25'],'nominee_photo':image_data_np,
-                        'ET':"PF" if values['pf']==True else "Non PF"}
+            c_name=[key for key in dict]
+            c_data=[dict[i] for i in dict]
+            for i in range(len(c_name)):
+                sql='UPDATE `twink_06ma`.`register` SET `%s` = "%s" WHERE (`emp_code` = "%s");' %(c_name[i],c_data[i],values['u2'] )
+                mycursor.execute(sql)
 
-                c_name=list(dict.keys())
-                c_data=list(dict.values())
-                for i in range(0,29):
-                    print(c_data[i])
-                    sql='UPDATE `twink_06ma`.`register` SET `%s` = "%s" WHERE (`emp_code` = "%s");' %(c_name[i],c_data[i],values['u2'] )
-                    mycursor.execute(sql)
+            mydb.commit()
 
-                mydb.commit()
-
-                ms.PopupTimed("Successfully updated",
-                              title='Employee Added',
-                              button_type=0,
-                              auto_close=True,
-                              auto_close_duration=1)
-                if values["etcnge"]==True:
-                    Menu["emp_data"].update(values=EmpdataFetch("Non PF"))
-                if values["etcnge"] == False:
-                    Menu["emp_data"].update(values=EmpdataFetch("PF"))
-                uMenu.close()
-
-            else:
-                ms.popup("Enter valid info..!")
+            ms.PopupTimed("Successfully updated",
+                          title='Employee Added',
+                          button_type=0,
+                          auto_close=True,
+                          auto_close_duration=1)
+            uMenu.close()
+            dir=r'C:\Twink_06MA\Temp'
+            for f in os.listdir(dir):
+                os.remove(os.path.join(dir, f))
+        else:
+            ms.popup("Enter valid info..!")
 
     if event =="ccwin":
         ccwMenu = ms.Window("Add Crow", [[ms.Column(Cleaning_Crew_GUI(), scrollable=True, size=(960, 700), element_justification='centre')]])
@@ -421,34 +441,34 @@ def RegisterFn(Menu, event, values):
                 if values[event] != "":
                     try:
                         if int(values[event]) / int(values[event]) == 1:
-                            print("hi")
+                            #print("hi")
                             if len(values[event]) == 10:
-                                print(len(values[event]))
+                                #print(len(values[event]))
                                 border(eMenu[event], "green")
                         if len(values[event]) > 10:
                             border(eMenu[event], "red")
                         if len(values[event]) < 10:
                             border(eMenu[event], None)
-                        print("X")
+                        #print("X")
                     except ValueError:
                         border(eMenu[event], "red")
-                    print("lenght", len(values[event]))
+                    #print("lenght", len(values[event]))
             if event == "e5":
                 if values[event] != "":
                     try:
                         if int(values[event]) / int(values[event]) == 1:
-                            print("hi")
+                            #print("hi")
                             if len(values[event]) == 10:
-                                print(len(values[event]))
+                                #print(len(values[event]))
                                 border(eMenu[event], "green")
                         if len(values[event]) > 10:
                             border(eMenu[event], "red")
                         if len(values[event]) < 10:
                             border(eMenu[event], None)
-                        print("X")
+                        #print("X")
                     except ValueError:
                         border(eMenu[event], "red")
-                    print("lenght", len(values[event]))
+                    #print("lenght", len(values[event]))
             if event == "e6":
                 if values[event] != "":
                     if values[event].isalnum() == True and len(values[event]) == 10:
@@ -461,18 +481,18 @@ def RegisterFn(Menu, event, values):
                 if values[event] != "":
                     try:
                         if int(values[event]) / int(values[event]) == 1:
-                            print("hi")
+                            #print("hi")
                             if len(values[event]) == 12:
-                                print(len(values[event]))
+                                #print(len(values[event]))
                                 border(eMenu[event], "green")
                         if len(values[event]) > 12:
                             border(eMenu[event], "red")
                         if len(values[event]) < 12:
                             border(eMenu[event], None)
-                        print("X")
+                        #print("X")
                     except ValueError:
                         border(eMenu[event], "red")
-                    print("lenght", len(values[event]))
+                    #print("lenght", len(values[event]))
             if event == "e8":
                 if values[event] != "":
                     border(eMenu[event], "green")
@@ -524,15 +544,15 @@ def RegisterFn(Menu, event, values):
                 if values[event] != "":
                     try:
                         if int(values[event]) / int(values[event]) == 1:
-                            print("hi")
+                            #print("hi")
                             if len(values[event]) == 10:
-                                print(len(values[event]))
+                                #print(len(values[event]))
                                 border(eMenu[event], "green")
                         if len(values[event]) > 10:
                             border(eMenu[event], "red")
                         if len(values[event]) < 10:
                             border(eMenu[event], None)
-                        print("X")
+                        #print("X")
                     except ValueError:
                         border(eMenu[event], "red")
 
@@ -596,15 +616,15 @@ def RegisterFn(Menu, event, values):
                 if values[event] != "":
                     try:
                         if int(values[event]) / int(values[event]) == 1:
-                            print("hi")
+                            #print("hi")
                             if len(values[event]) == 10:
-                                print(len(values[event]))
+                                #print(len(values[event]))
                                 border(eMenu[event], "green")
                         if len(values[event]) > 10:
                             border(eMenu[event], "red")
                         if len(values[event]) < 10:
                             border(eMenu[event], None)
-                        print("X")
+                        #print("X")
                     except ValueError:
                         border(eMenu[event], "red")
             if event == "e26":
@@ -662,21 +682,20 @@ def RegisterFn(Menu, event, values):
     if event == "emp_data":
         data = Menu['emp_data'].get()
         globals()['crow'] = [data[row] for row in values[event]]
-        print(crow)
+        #print(crow)
 
     if event =="Update Employee":
-        print(crow[0][0])
         a=crow[0][0]
-        print("a",a)
         uMenu = ms.Window("Update Employee",[[ms.Column( Employee_update_GUI(a),
-                                                          scrollable=True, size=(760, 700),
+                                                          scrollable=True, size=(800, 700),
                                                           element_justification='centre')]])
         while True:
             event, values = uMenu.read()
+            print(event)
             if event == ms.WIN_CLOSED:
                 uMenu.close()
                 break
-            if event == 'update employee':
+            if event == 'updateemp':
                 Update_Employee(event, values)
             if event == "load pimg":
                 filename = values["u22"]
@@ -737,3 +756,22 @@ def RegisterFn(Menu, event, values):
             mycursor.execute("UPDATE `register` SET `active_status` = 'N' WHERE (`emp_code` = '%s')" % crow[0][0])
             mydb.commit()
             Menu['emp_data'].update(values=EmpdataFetch("PF"))
+
+    if event == "empexp":
+        mycursor.execute("select emp_code, employee_name, designation, esic_no, uan_no, "
+                         "pan_no,aadhar_no,address,marriage_status,f_sp_name,gender,date_of_join from register where active_status = 'Y'")
+        db_data=[list(x) for x in mycursor.fetchall()]
+        xl=openpyxl.load_workbook(r'C:\Twink_06MA\Master_Files\Emp_Exp.xlsx')
+        xl.active=xl['Emp_Info']
+        xlc=xl.active
+        rowc=2
+        colc=1
+        for step in db_data:
+            colc=1
+            for i in step:
+                xlc.cell(row=rowc,column=colc).value=i
+                colc+=1
+            rowc+=1
+        xl.save(r'C:\Twink_06MA\Master_Files\Emp_Exp01.xlsx')
+
+

@@ -43,10 +43,8 @@ def cc_att_(event,values,Menu):
                 data.append(values['cc_uid' + str(i)])
                 data.append(values["cc_atpdate"])
                 for j in range (0,len(dis)):
-                  print("i",values['cc_dis' + str(i)])
+                  #print("i",values['cc_dis' + str(i)])
                   if values['cc_dis' + str(i)] == dis[j][1]:
-                      print("l",dis[j][1])
-                      print("k",dis[j][0])
                       data.append(dis[j][0])
                 ccatdata.append(data)
                 print("s",ccatdata)

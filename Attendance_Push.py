@@ -121,8 +121,8 @@ def AttendancePushLay():
                                    ms.Column(datalistnp,scrollable=True,visible=False,vertical_scroll_only=True,size=(swi-70,shi-220),key='atpnpf')],
                                    [ms.Checkbox("Non Pf",key='atpswap',enable_events= True,font=fstyle)]],
                   font=fstyle,size=(swi-50,shi-150))],
-         [ms.Input(default_text= "Password",size=(15,1),font=fstyle,password_char="*",key='atppw')],
-        [ms.Button("Update",font=fstyle,key='atpupdate')
+         [ms.Input(default_text= "",size=(15,1),font=fstyle,password_char="*",key='atppw',tooltip="Please enter the Password to proceed .!")],
+        [ms.Button("Update",font=fstyle,key='atpupdate',tooltip="Please enter the Password to proceed .!")
          ]]
     return layout
 
@@ -263,6 +263,5 @@ def AttendancePushFn(Menu,event,values):
                  (pushdate[1], pushdate[2], pushdate[0],)
            mycursor.execute(sql)
            mydb.commit()
-
        else:
            ms.popup_auto_close("Wrong Password", auto_close_duration=1)
