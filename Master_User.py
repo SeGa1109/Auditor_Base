@@ -125,7 +125,7 @@ def Master_User(Menu,event,values):
     if event == "add_mail_list":
         if values['ml_name'] and values['designation'] and values['mail_id'] !="":
             sql = "INSERT INTO mail_list (name_,designation,mail_id ) VALUES ( '%s','%s','%s')" % (
-            values['designation'], values['designation'],values['mail_id'])
+            values['ml_name'], values['designation'],values['mail_id'])
             mycursor.execute(sql)
             mydb.commit()
             Menu["mail_data"].update(values=MAILFetch())

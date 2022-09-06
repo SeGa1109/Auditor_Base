@@ -19,8 +19,10 @@ def WageCalcLay():
     ]]
     layout=[
         [ms.Input(todatemy,font=fstyle,size=(10,1),key='wcdateinp'),ms.CalendarButton(" ",target='wcdateinp',format="%m-%Y"),
-         ms.Button("Generate",key='wcgen',font=fstyle),ms.Sizer(400,0), ms.Text("Wages Report Generation",font=fstylehd ),ms.Sizer(500,0),
-         ms.Button("Export",key='wcexp',font=fstyle,disabled=True)],
+         ms.Button("Generate",key='wcgen',font=fstyle),ms.Sizer(400,0), ms.Text("Wages Report Generation",font=fstylehd ),ms.Sizer(400,0),
+         ms.Button("Export",key='wcexp',font=fstyle,disabled=True),
+         ms.Button("Mail", key='wcmail', font=fstyle, disabled=True)
+         ],
        [ ms.Frame("Output",layout=[[ms.Column(TL_WCEXP,scrollable=True,size=(swi-50,shi-80),)]],font=fstyle,size=(swi-50,shi-80))
     ]
     ]
@@ -123,6 +125,7 @@ def WageCalcFn(Menu,event,values):
         print(wage_proc_data)
         Menu['TL_WC'].update(values=wage_proc_data)
         Menu['wcexp'].update(disabled=False)
+        Menu['wcmail'].update(disabled=False)
 
     if event == 'wcexp':
         xl=openpyxl.load_workbook(r"C:\Twink_06MA\Master_Files\Wage_Exp.xlsx")
@@ -182,6 +185,39 @@ def WageCalcFn(Menu,event,values):
                 colc += 1
             rowc += 1
         xl.save(r"C:\Twink_06MA\Master_Files\Wage_Exp_01.xlsx")
+
+    if event == 'wcmail':
+        maillist=popup_select(mailid_fetch(False,""), select_multiple=True)
+        for i in maillist:
+            mail_content = "PFA"
+            sender_address = 'asta.sunilindustries@gmail.com'
+            sender_pass = 'irlluaqjqvcefghd'
+            # Setup the MIME
+            receiver_address = mailid_fetch(True,i)
+            message = MIMEMultipart()
+            message['From'] = sender_address
+            message['To'] = receiver_address
+            message['Subject'] = "Wage Calculation_Output"
+            message.attach(MIMEText(mail_content, 'plain'))
+            attach_file_name = r"C:\Twink_06MA\Master_Files\Wage_Exp_01.xlsx"
+            attach_file = open(attach_file_name, 'rb')  # Open the file as binary mode
+            payload = MIMEBase('application', 'octate-stream')
+            payload.set_payload((attach_file).read())
+            encoders.encode_base64(payload)  # encode the attachment
+            # add payload header with filename
+            payload.add_header('Content-Disposition ', 'attachment',
+                               filename='Wage_Calc_Output.xlsx')
+            message.attach(payload)
+            # Create SMTP session for sending the mail
+            session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
+            session.starttls()  # enable security
+            session.login(sender_address, sender_pass)
+            text = message.as_string()
+            session.sendmail(sender_address, receiver_address, text)
+            session.quit()
+            print('Mail Sent')
+        ms.popup_auto_close("Mail Successfully Sent", font=fstyle, no_titlebar=True)
+
 
 
 

@@ -73,10 +73,10 @@ def AttendancePushLay():
                            ms.Text(emplistny[i][2], font=fstyle, size=(35, 1), key='atpnnsy' + str(i),
                                    justification='center'), ms.Sizer(2, 0),
                            ms.Text(emplistny[i][3], font=fstyle, size=(35, 1), key='atpfsnsy' + str(i),
-                                   justification='center'), ms.Sizer(35, 0),
-                           ms.Radio("I", font=fstyle, key='atp1snsy' + str(i), group_id='atpsdnsy' + str(i)),
-                           ms.Radio("II", font=fstyle, key='atp2snsy' + str(i), group_id='atpsdnsy' + str(i)),
-                           ms.Radio("III", font=fstyle, key='atp3snsy' + str(i), group_id='atpsdnsy' + str(i)),
+                                   justification='center'), ms.Sizer(15, 0),
+                           ms.Radio("1", font=fstyle, key='atp1snsy' + str(i), group_id='atpsdnsy' + str(i)),
+                           ms.Radio("2", font=fstyle, key='atp2snsy' + str(i), group_id='atpsdnsy' + str(i)),
+                           ms.Radio("3", font=fstyle, key='atp3snsy' + str(i), group_id='atpsdnsy' + str(i)),
                            ms.Radio("A", font=fstyle, key='atpasnsy' + str(i), group_id='atpsdsy' + str(i)),
                            ms.Sizer(25, 0),
                            ms.Spin(values=[0, 1, 2, 3, 4], initial_value=0, font=fstyle, size=(4, 1),
@@ -152,7 +152,7 @@ def AttendancePushFn(Menu,event,values):
            DB_Creation(values['atpdate'])
            mycursor.execute("select `%s` from %s_%s where empcode = 'counter'" % (pushdate[0], pushdate[1], pushdate[2]))
            counter = mycursor.fetchall()[0][0]
-           mycursor.execute("INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')," \
+           mycursor.execute("INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')" \
                % (todate.strftime("%Y/%m/%d %H:%M:%S"), values["atpers"][0], datetime.strptime(values['atpdate'], "%d-%m-%Y").strftime("%Y-%m-%d"), "C"))
            mydb.commit()
            mycursor.execute("select Description,UID from dep_list")

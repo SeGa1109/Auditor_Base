@@ -29,7 +29,9 @@ def AttendanceViewLay():
              ms.Text("Date",font=fstyle,size=(7,1)),ms.Input(todatemy,disabled= True,enable_events=True, size=(8,2),font=fstyle,key='atvwdate'),
              ms.CalendarButton(" ",target='atvwdate',format="%m-%Y")],
             [ms.Frame("Output",layout=[[ms.Column([[TL]],size=(swi-70,shi-200),scrollable=True)],
-                                        [ms.Button("Export",key='wcxlexp',font=fstyle)],
+                                        [ms.Button("Export",key='wcxlexp',font=fstyle),
+                                         ms.Button("Mail", key='wcxlmail', font=fstyle)
+                                         ],
                                        ],size=(swi-70,shi-100),font=fstyle,element_justification='center')]
             ]
 
@@ -130,6 +132,55 @@ def AttendaceViewFn(Menu,event,values):
             Menu['TL_AdvView'].update(values=(advancefetch(values['advdateinp'])))
         except:
             pass
+
+    if event == 'wcxlmail':
+        data=attendance_fetch(values['atvwdate'])
+        xl=openpyxl.load_workbook(filename=r'C:\Twink_06MA\Master_Files\Atn_Exp.xlsx')
+        for step in ['Attendance','OT','Expenses']:
+            xl.active=xl[step]
+            xlc=xl.active
+            atndata=datasplit(copy.deepcopy(data),step)
+            crow=2
+            ccol=1
+            for part in atndata:
+                for i in range(len(part)):
+                    xlc.cell(row=crow,column=ccol).value=part[i]
+                    ccol+=1
+                crow+=1
+                ccol = 1
+
+        xl.save(filename=r'C:\Twink_06MA\Master_Files\Atn_ExpT1.xlsx')
+        maillist = popup_select(mailid_fetch(False,""), select_multiple=True)
+        for i in maillist:
+            mail_content = "PFA"
+            sender_address = 'asta.sunilindustries@gmail.com'
+            sender_pass = 'irlluaqjqvcefghd'
+            # Setup the MIME
+            receiver_address = mailid_fetch(True,i)
+            message = MIMEMultipart()
+            message['From'] = sender_address
+            message['To'] = receiver_address
+            message['Subject'] = "Attendance_Output"
+            message.attach(MIMEText(mail_content, 'plain'))
+            attach_file_name = r'C:\Twink_06MA\Master_Files\Atn_ExpT1.xlsx'
+            attach_file = open(attach_file_name, 'rb')  # Open the file as binary mode
+            payload = MIMEBase('application', 'octate-stream')
+            payload.set_payload((attach_file).read())
+            encoders.encode_base64(payload)  # encode the attachment
+            # add payload header with filename
+            payload.add_header('Content-Disposition ', 'attachment',
+                               filename='Attendance_Output.xlsx')
+            message.attach(payload)
+            # Create SMTP session for sending the mail
+            session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
+            session.starttls()  # enable security
+            session.login(sender_address, sender_pass)
+            text = message.as_string()
+            session.sendmail(sender_address, receiver_address, text)
+            session.quit()
+            print('Mail Sent')
+        ms.popup_auto_close("Mail Successfully Sent", font=fstyle, no_titlebar=True)
+
 
 
 

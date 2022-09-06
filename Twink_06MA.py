@@ -60,6 +60,9 @@ while True:
             break
 
         if event == "Home" or  event[:6] == 'Escape':
+            mycursor.execute(
+                "select `%s` from %s_%s where empcode = 'counter'" % (tempdate[0], tempdate[1], tempdate[2]))
+            atstat = "created" if mycursor.fetchall()[0][0] == "v" else "To be Created"
             for i in MenuList:
                 Menu[i].update(visible=False)
             Menu['base'].update(visible=True)
@@ -79,17 +82,16 @@ while True:
                 Menu[i].update(visible=False)
             Menu['atnview'].update(visible=True)
 
-        if event == 'Master User' :
+        if event == 'Master User' or event[:2] == 'F9' :
             chk = ms.popup_get_text("Enter password to enter Master User ", password_char='*', size=(20, 1), font=fstyle,
                                      keep_on_top=True)
             if chk == "AstA_SIL":
                 for i in MenuList:
                     Menu[i].update(visible=False)
                 Menu['mumneu'].update(visible=True)
-            elif chk != "AstA_SIL":
-                ms.popup_auto_close("Wrong Password", no_titlebar=True, auto_close_duration=2)
-            elif chk == "Cancel":
-                print(None)
+            else:
+                ms.popup_auto_close("Please try again",font=fstyle, no_titlebar=True, auto_close_duration=2)
+
 
         if event == 'CC_Attendence':
             for i in MenuList:
@@ -124,7 +126,7 @@ while True:
         if event == 'mailreport':
             chk=ms.popup_ok("Please confrim to send mail",font=fstyle,no_titlebar=True)
             if chk == "OK":
-                mailreport("01-08-2022")
+                mailreport(todatenf)
     #except Exception as e:
        # ms.popup_ok(e,font=fstyle,title="Error, Please try again")
 

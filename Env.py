@@ -1,5 +1,4 @@
 import copy
-
 import PySimpleGUI as ms
 import mysql.connector
 from datetime import *
@@ -13,6 +12,14 @@ import calendar
 import openpyxl
 from PIL import Image
 import pprint
+import smtplib
+import shutil
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
+
 
 mydb = mysql.connector.connect( host='localhost', user="root", passwd="MSeGa@1109",)
 mycursor = mydb.cursor()
@@ -71,15 +78,24 @@ def CCWFetch():
 def EmpdataFetch(type):
     if type=="PF":
         mycursor.execute("select Emp_code, employee_name,f_sp_name,Gender,Phone_no,base_salary "
-                         "from register where active_status = 'Y' and ET ='PF' and shift_work = 'No' ")
+                         "from register where active_status = 'Y' and ET ='PF' and shift_work = 'No' order by employee_name")
         S1=[list(x) for x in mycursor.fetchall()]
-        mycursor.execute('select Emp_code, employee_name,f_sp_name,Gender,Phone_no,concat(shift_1_salary,",",shift_2_salary,",",shift_3_salary) from register where active_status = "Y" and ET ="PF" and shift_work = "Yes" ')
+        mycursor.execute('select Emp_code, employee_name,f_sp_name,Gender,Phone_no,'
+                         'concat(shift_1_salary,",",shift_2_salary,",",shift_3_salary) from register '
+                         'where active_status = "Y" and ET ="PF" and shift_work = "Yes" order by employee_name')
         S2 = [list(x) for x in mycursor.fetchall()]
+        print(S1+S2)
         return S1+S2
     if type=="Non PF":
         mycursor.execute("select Emp_code, employee_name,f_sp_name,Gender,Phone_no,base_salary "
-                         "from register where active_status = 'Y' and ET ='Non PF' ")
-        return ([list(x) for x in mycursor.fetchall()])
+                         "from register where active_status = 'Y' and ET ='Non PF' and shift_work = 'No' order by employee_name")
+        S1=[list(x) for x in mycursor.fetchall()]
+        mycursor.execute('select Emp_code, employee_name,f_sp_name,Gender,Phone_no,'
+                         'concat(shift_1_salary,",",shift_2_salary,",",shift_3_salary) from register '
+                         'where active_status = "Y" and ET ="Non PF" and shift_work = "Yes" order by employee_name')
+        S2 = [list(x) for x in mycursor.fetchall()]
+        print(S1 + S2)
+        return S1+S2
 
 def DB_Creation(inp):
     date_split=list(inp.split("-"))
@@ -106,19 +122,22 @@ def DB_Creation(inp):
     except:
         pass
 
-#DB_Creation("01-08-2022")
+#DB_Creation("01-09-2022")
 
 def datasplit(data,filter):
 
     if filter == 'Attendance':
-        for part in data:
-            part.pop(3)
-            for i in range(3,len(part)):
-                if part[i]!=None:
-                    temp=list(part[i].split(","))
-                    part[i]=temp[0]
-                else:
-                    pass
+        try:
+            for part in data:
+                part.pop(3)
+                for i in range(3,len(part)):
+                    if part[i]!=None:
+                        temp=list(part[i].split(","))
+                        part[i]=temp[0]
+                    else:
+                        pass
+        except:
+            pass
     elif filter == 'OT':
         for part in data:
             part.pop(3)
@@ -239,9 +258,12 @@ dep_list=list(sum(mycursor.fetchall(),()))
 mycursor.execute("select count(*) from register where active_status = 'Y'")
 empcount=mycursor.fetchall()[0][0]
 tempdate=todatenf.split("-")
+try:
+    mycursor.execute("select `%s` from %s_%s where empcode = 'counter'" % (tempdate[0], tempdate[1], tempdate[2]))
+    atstat= "created" if mycursor.fetchall()[0][0] == "v" else "To be Created"
+except:
+    atstat = "To be Created"
 
-mycursor.execute("select `%s` from %s_%s where empcode = 'counter'" % (tempdate[0], tempdate[1], tempdate[2]))
-atstat= "created" if mycursor.fetchall()[0][0] == "v" else "To be Created"
 #atstat="created"
 def mailreport(inp):
     mycursor.execute("select UID,Description from dep_list")
@@ -255,7 +277,10 @@ def mailreport(inp):
     for i in range(len(db_data)):
         if db_data[i] != None:
             temp = list(db_data[i].split(","))
-            db_data[i] = dplist.get(int(temp[3]))
+            try:
+                db_data[i] = dplist.get(int(temp[3]))
+            except:
+                pass
         else:
             pass
     print(db_data)
@@ -266,28 +291,25 @@ def mailreport(inp):
     for i in worklist:
         worklog.update({db_data.count(i): i})
 
-    import smtplib
-    import os
-    from email.mime.multipart import MIMEMultipart
-    from email.mime.text import MIMEText
-    from email.mime.base import MIMEBase
-    from email import encoders
-    mail_content = "\n".join("{}\t           {}".format(k, v) for k, v in worklog.items())
-    sender_address = 'asta.sunilindustries@gmail.com'
-    sender_pass = 'irlluaqjqvcefghd'
-    # Setup the MIME
-    message = MIMEMultipart()
-    message['From'] = sender_address
-    message['To'] = 'aishwar8@gmail.com'
-    message['Subject'] = "Daily Attendance Mail - %s"%inp
-    message.attach(MIMEText(mail_content, 'plain'))
-    # Create SMTP session for sending the mail
-    session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
-    session.starttls()  # enable security
-    session.login(sender_address, sender_pass)
-    text = message.as_string()
-    session.sendmail(sender_address, 'aishwar8@gmail.com', text)
-    session.quit()
+    maillist = popup_select(mailid_fetch(False, ""), select_multiple=True)
+    for i in maillist:
+        mail_content = "\n".join("{}\t           {}".format(k, v) for k, v in worklog.items())
+        sender_address = 'asta.sunilindustries@gmail.com'
+        sender_pass = 'irlluaqjqvcefghd'
+        # Setup the MIME
+        receiver_address = mailid_fetch(True, i)
+        message = MIMEMultipart()
+        message['From'] = sender_address
+        message['To'] = receiver_address
+        message['Subject'] = "Daily Attendance Mail - %s"%inp
+        message.attach(MIMEText(mail_content, 'plain'))
+        # Create SMTP session for sending the mail
+        session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
+        session.starttls()  # enable security
+        session.login(sender_address, sender_pass)
+        text = message.as_string()
+        session.sendmail(sender_address, receiver_address, text)
+        session.quit()
     ms.popup_auto_close("Mail Successfully Sent",font=fstyle,no_titlebar=True)
 
 def advancefetch(inp):
@@ -316,3 +338,22 @@ def shiftcheck(inp):
     mycursor.execute("select shift_work from register where emp_code='%s'"%inp)
     chk=mycursor.fetchall()[0][0]
     return True if chk=="Yes" else False
+
+def popup_select(the_list,select_multiple=False):
+    layout = [[ms.Listbox(the_list,key='_LIST_',size=(45,5),select_mode='extended' if select_multiple else 'single',bind_return_key=True),ms.OK()]]
+    window = ms.Window('Select the mail id to send',layout=layout)
+    event, values = window.read()
+    window.close()
+    del window
+    if select_multiple or values['_LIST_'] is None:
+        return values['_LIST_']
+    else:
+        return values['_LIST_'][0]
+
+def mailid_fetch(x,inp):
+    if x == False:
+        mycursor.execute("select name_ from mail_list")
+        return list(sum(mycursor.fetchall(),()))
+    else:
+        mycursor.execute("select mail_id from mail_list where name_='%s'"%inp)
+        return mycursor.fetchall()[0][0]

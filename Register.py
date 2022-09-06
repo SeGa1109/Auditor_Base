@@ -6,10 +6,10 @@ from Env import *
 
 def RegsiterLay():
     layout = [[ms.Text("Employee Register", font=fstylehd)],
-              [ms.Sizer(swi - 200, 0),
+              [ms.Sizer(swi - 400, 0),
                ms.Button("Export", font=fstyle, key='empexp'),
+               ms.Button("Mail", font=fstyle, key='empmail'),
                ms.Button("Add", font=fstyle, key='empadd')],
-
               [ms.Frame("Employee Data",
                         [[ms.Table(values=EmpdataFetch("PF"),
                                    headings=["Employee Code", "Name", "Father/Spouse Name", "Gender", "Phone No.",
@@ -144,21 +144,23 @@ def RegisterFn(Menu, event, values):
 
     def Add_Employee(event, values):
         if event == "add employee":
-            for i in range(1,27):
+            for i in range(1,22):
+                chk=True
+                if values['e' + str(i)] == "":
+                    chk = False
+                    break
+            for i in [24,25]:
                 chk=True
                 if values['e' + str(i)] == "":
                     chk = False
                     break
             if chk == True:
-                filename = str(values['e22'])
-                file = open(filename, 'rb').read()
-                image_data_ep = base64.b64encode(file)
-                filename = str(values['e23'])
-                file = open(filename, 'rb').read()
-                image_data_sp = base64.b64encode(file)
-                filename = str(values['e26'])
-                file = open(filename, 'rb').read()
-                image_data_np = base64.b64encode(file)
+                try:
+                    shutil.copy(values['e22'],r'C:\Twink_06MA\Image_Data\%s_img.jpg'%values['e2'])
+                    shutil.copy(values['e23'], r'C:\Twink_06MA\Image_Data\%s_simg.jpg' % values['e2'])
+                    shutil.copy(values['e26'], r'C:\Twink_06MA\Image_Data\%s_nimg.jpg' % values['e2'])
+                except:
+                    pass
 
                 dict = {'employee_name': values['e1'], 'emp_code': values['e2'],'designation':values['e3'],'esic_no':values['e4'],'uan_no':values['e5'],'pan_no': values['e6'],
                         'aadhar_no': values['e7'],'address': values['e8'],'marriage_status':"Yes" if values["m_yes"]==True else "No", 'f_sp_name': values['e9'],
@@ -167,8 +169,8 @@ def RegisterFn(Menu, event, values):
                         'shift_1_salary': values['e11'],'shift_2_salary': values['e12'],'shift_3_salary': values['e13'],
                         'phone_no': values['e14'],'blood_group': values['e15'],'bank_account_no': values['e16'], 'bank_name': values['e17'],
                         'ifsc_code': values['e18'],'branch': values['e19'],'date_of_birth': values['e20'],
-                        'date_of_join': values['e21'],'photo': image_data_ep,'signature': image_data_sp,
-                        'nominee_name': values['e24'],'nominee_phone_no': values['e25'],'nominee_photo':image_data_np,
+                        'date_of_join': values['e21'],
+                        'nominee_name': values['e24'],'nominee_phone_no': values['e25'],
                         'ET':"PF" if values['pf']==True else "Non PF",'office_staff':'yes'if values["o_staff"]==True else 'no'}
 
                 placeholders = ', '.join(['%s'] * len(dict))
@@ -184,7 +186,7 @@ def RegisterFn(Menu, event, values):
                               auto_close=True,
                               auto_close_duration=1)
                 eMenu.close()
-
+                DB_Creation(todatenf)
             else:
                 ms.popup("Enter valid info..!")
 
@@ -266,12 +268,12 @@ def RegisterFn(Menu, event, values):
              ms.Input(ep_data[24], size=(26, 1), enable_events=True,do_not_clear=True, key='u21', font=fstyle),ms.Sizer(4, 0),
              ms.CalendarButton('Choose',image_data=chse, format='%d-%m-%y', font=fstyle, target='u21', size=(6, 1), key='date1'), ],
             [ms.Text("photo:", justification='left', size=(20, 1), font=fstyle),
-             ms.Input("C:\Twink_06MA\Temp\Photo.png", size=(19, 1), enable_events=True,do_not_clear=True, key='u22', font=fstyle),
+             ms.Input("", size=(19, 1), enable_events=True,do_not_clear=True, key='u22', font=fstyle),
              ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u22",key="b1", font=fstyle),
              ms.Button("Load",image_data=load, font=fstyle,size=(5,1), key="load pimg"), ms.Sizer(2, 0),
              ],
             [ms.Text("Specimen Signature:", justification='left', size=(20, 1), font=fstyle, ),
-             ms.Input("C:\Twink_06MA\Temp\Signature.png", size=(19, 1), enable_events=True,do_not_clear=True, key='u23', font=fstyle),
+             ms.Input("", size=(19, 1), enable_events=True,do_not_clear=True, key='u23', font=fstyle),
              ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u23",key="b2", font=fstyle),
              ms.Button("Load",image_data=load,size=(5,1), font=fstyle, key="load simg"), ms.Sizer(2, 0),
              ],
@@ -280,7 +282,7 @@ def RegisterFn(Menu, event, values):
             [ms.Text("Nominee Phone No:", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input(ep_data[29], size=(30, 1), enable_events=True,do_not_clear=True, key='u25', font=fstyle)],
             [ms.Text("Nominee photo:", justification='left', size=(20, 1), font=fstyle),
-             ms.Input(r"C:\Twink_06MA\Temp\Nominee.png", size=(19, 1), enable_events=True,do_not_clear=True, key='u26', font=fstyle),
+             ms.Input(r"", size=(19, 1), enable_events=True,do_not_clear=True, key='u26', font=fstyle),
              ms.FileBrowse(file_types=file_types,size=(6,1),enable_events=True, target="u26",key="b3", font=fstyle),
              ms.Button("Load",image_data=load,size=(5,1), font=fstyle, key="load nimg"), ms.Sizer(2, 0),
              ],
@@ -289,30 +291,41 @@ def RegisterFn(Menu, event, values):
              ms.Radio("Non PF","etype",default=et_val[1], size=(6, 1),enable_events=True, key='non pf', font=fstyle)
              ],
         ]
-        os.chdir(r'C:\Twink_06MA\Temp')
-        with open("Photo.jpg", "wb") as fh:
-            fh.write(base64.decodebytes(ep_data[26]))
-        with open("Signature.jpg", "wb") as fh:
-            fh.write(base64.decodebytes(ep_data[27]))
-        with open("Nominee.jpg", "wb") as fh:
-            fh.write(base64.decodebytes(ep_data[30]))
+        try:
+            filename = r"C:\Twink_06MA\Image_Data\%s_img.jpg"%epc
+            if os.path.exists(filename):
+                image = Image.open(filename)
+                image.thumbnail((300, 300))
+                bio = io.BytesIO()
+                image.save(bio, format="PNG")
+                Photo=bio.getvalue()
+            else:
+                Photo=None
+            filename = r"C:\Twink_06MA\Image_Data\%s_simg.jpg"%epc
+            if os.path.exists(filename):
+                image = Image.open(filename)
+                image.thumbnail((300, 300))
+                bio = io.BytesIO()
+                image.save(bio, format="PNG")
+                Signature=bio.getvalue()
+            else:
+                Signature=None
+            filename = r"C:\Twink_06MA\Image_Data\%s_nimg.jpg"%epc
+            if os.path.exists(filename):
+                image = Image.open(filename)
+                image.thumbnail((300, 300))
+                bio = io.BytesIO()
+                image.save(bio, format="PNG")
+                Nominee=bio.getvalue()
+            else:
+                Nominee=None
+        except:
+            Photo,Signature,Nominee=None,None,None
+        print(Photo,Signature,Nominee)
         #---
-        img = Image.open("Photo.jpg")
-        img.save("Photo.png")
-        img = Image.open("Signature.jpg")
-        img.save("Signature.png")
-        img = Image.open("Nominee.jpg")
-        img.save("Nominee.png")
-        with open("Photo.png", "rb") as image_file:
-            Photo = base64.b64encode(image_file.read())
-        with open("Signature.png", "rb") as image_file:
-            Signature = base64.b64encode(image_file.read())
-        with open("Nominee.png", "rb") as image_file:
-            Nominee = base64.b64encode(image_file.read())
-
-        Employee_Image = [[ms.Image(source=Photo, key="-IMAGE-",subsample=3)]]
-        Signature_Image = [[ms.Image(source=Signature,key="-IMAGE2-",size=(170, 100),subsample=10)]]
-        Nominee_Image = [[ms.Image(source=Nominee,key="-IMAGE3-",subsample=3)]]
+        Employee_Image = [[ms.Image(data=Photo, key="-IMAGE-",subsample=3)]]
+        Signature_Image = [[ms.Image(data=Signature,key="-IMAGE2-",size=(170, 100),subsample=10)]]
+        Nominee_Image = [[ms.Image(data=Nominee,key="-IMAGE3-",subsample=3)]]
         Employee_Update_GUI = [[
             ms.Column([[ms.Frame("Employee Details", Employee_Details, font=fstyle)]]),
             ms.Column([
@@ -323,25 +336,47 @@ def RegisterFn(Menu, event, values):
         return Employee_Update_GUI
 
     def Update_Employee(event, values):
-        print("X")
-        for i in range(1, 27):
-            chk=True
+        for i in range(1, 22):
+            chk = True
             if values['u' + str(i)] == "":
-                chk=False
+                chk = False
+                break
+        for i in [24, 25]:
+            chk = True
+            if values['u' + str(i)] == "":
+                chk = False
                 break
         #print(chk)
         if chk == True:
-            '''
-            filename = str(values['u22'])
-            file = open(filename, 'rb').read()
-            image_data_ep = base64.b64encode(file)
-            filename = str(values['u23'])
-            file = open(filename, 'rb').read()
-            image_data_sp = base64.b64encode(file)
-            filename = str(values['u26'])
-            file = open(filename, 'rb').read()
-            image_data_np = base64.b64encode(file)
-'''
+            if values['u22']!="":
+                try:
+                    os.remove(r"C:\Twink_06MA\Image_Data\%s_img.jpg"%values['u2'])
+                except:
+                    pass
+                try:
+                    shutil.copy(values['u22'], r"C:\Twink_06MA\Image_Data\%s_img.jpg" % values['u2'])
+                except:
+                    pass
+            if values['u23']!="":
+                try:
+                    os.remove(r"C:\Twink_06MA\Image_Data\%s_nimg.jpg"%values['u2'])
+
+                except:
+                    pass
+                try:
+                    shutil.copy(values['u23'], r"C:\Twink_06MA\Image_Data\%s_simg.jpg" % values['u2'])
+                except:
+                    pass
+
+            if values['u26']!="":
+                try:
+                    os.remove(r"C:\Twink_06MA\Image_Data\%s_simg.jpg"%values['u2'])
+                except:
+                    pass
+                try:
+                    shutil.copy(values['u26'], r"C:\Twink_06MA\Image_Data\%s_simg.jpg" % values['u2'])
+                except:
+                    pass
             dict = {'employee_name': values['u1'],'designation':values['u3'],'esic_no':values['u4'],'uan_no':values['u5'],
                     'aadhar_no': values['u6'],'address': values['u7'],'marriage_status':'Yes' if values["m_yes"]==True else "No", 'f_sp_name': values['u9'],
                     'gender':"M" if values['m']==True else "F" if values['f']==True else "O" ,
@@ -367,9 +402,6 @@ def RegisterFn(Menu, event, values):
                           auto_close=True,
                           auto_close_duration=1)
             uMenu.close()
-            dir=r'C:\Twink_06MA\Temp'
-            for f in os.listdir(dir):
-                os.remove(os.path.join(dir, f))
         else:
             ms.popup("Enter valid info..!")
 
@@ -422,14 +454,12 @@ def RegisterFn(Menu, event, values):
                     Menu["etcnge"].update(value=True)
 
             if event == "load pimg":
-                filename = values["e20"]
+                filename = values["e22"]
                 if os.path.exists(filename):
-                    image = Image.open(values["e20"])
+                    image = Image.open(values["e22"])
                     image.thumbnail((300, 300))
                     bio = io.BytesIO()
-                    # Actually store the image in memory in binary
                     image.save(bio, format="PNG")
-                    # Use that image data in order to
                     eMenu["-IMAGE-"].update(data=bio.getvalue())
 
             if event == "e1":
@@ -634,25 +664,21 @@ def RegisterFn(Menu, event, values):
                     border(eMenu[event], "red")
 
             if event == "load simg":
-                filename = values["e21"]
+                filename = values["e23"]
                 if os.path.exists(filename):
-                    image = Image.open(values["e21"])
+                    image = Image.open(values["e23"])
                     image.thumbnail((300, 300))
                     bio = io.BytesIO()
-                    # Actually store the image in memory in binary
                     image.save(bio, format="PNG")
-                    # Use that image data in order to
                     eMenu["-IMAGE2-"].update(data=bio.getvalue())
 
             if event == "load nimg":
-                filename = values["e24"]
+                filename = values["e26"]
                 if os.path.exists(filename):
-                    image = Image.open(values["e24"])
+                    image = Image.open(values["e26"])
                     image.thumbnail((300, 300))
                     bio = io.BytesIO()
-                    # Actually store the image in memory in binary
                     image.save(bio, format="PNG")
-                    # Use that image data in order to
                     eMenu["-IMAGE3-"].update(data=bio.getvalue())
 
             if event == "pf":
@@ -773,5 +799,52 @@ def RegisterFn(Menu, event, values):
                 colc+=1
             rowc+=1
         xl.save(r'C:\Twink_06MA\Master_Files\Emp_Exp01.xlsx')
+        os.system(r'C:\Twink_06MA\Master_Files\Emp_Exp01.xlsx')
 
+    if event == 'empmail':
+        mycursor.execute("select emp_code, employee_name, designation, esic_no, uan_no, "
+                         "pan_no,aadhar_no,address,marriage_status,f_sp_name,gender,date_of_join from register where active_status = 'Y'")
+        db_data=[list(x) for x in mycursor.fetchall()]
+        xl=openpyxl.load_workbook(r'C:\Twink_06MA\Master_Files\Emp_Exp.xlsx')
+        xl.active=xl['Emp_Info']
+        xlc=xl.active
+        rowc=2
+        colc=1
+        for step in db_data:
+            colc=1
+            for i in step:
+                xlc.cell(row=rowc,column=colc).value=i
+                colc+=1
+            rowc+=1
+        xl.save(r'C:\Twink_06MA\Master_Files\Emp_Exp01.xlsx')
+        maillist = popup_select(mailid_fetch(False,""), select_multiple=True)
+        for i in maillist:
+            mail_content = "PFA"
+            sender_address = 'asta.sunilindustries@gmail.com'
+            sender_pass = 'irlluaqjqvcefghd'
+            # Setup the MIME
+            receiver_address = mailid_fetch(True,i)
+            message = MIMEMultipart()
+            message['From'] = sender_address
+            message['To'] = receiver_address
+            message['Subject'] = "Employee Register Output"
+            message.attach(MIMEText(mail_content, 'plain'))
+            attach_file_name = r'C:\Twink_06MA\Master_Files\Emp_Exp01.xlsx'
+            attach_file = open(attach_file_name, 'rb')  # Open the file as binary mode
+            payload = MIMEBase('application', 'octate-stream')
+            payload.set_payload((attach_file).read())
+            encoders.encode_base64(payload)  # encode the attachment
+            # add payload header with filename
+            payload.add_header('Content-Disposition ', 'attachment',
+                               filename='Employee_register.xlsx')
+            message.attach(payload)
+            # Create SMTP session for sending the mail
+            session = smtplib.SMTP('smtp.gmail.com', 587)  # use gmail with port
+            session.starttls()  # enable security
+            session.login(sender_address, sender_pass)
+            text = message.as_string()
+            session.sendmail(sender_address, receiver_address, text)
+            session.quit()
+            print('Mail Sent')
+        ms.popup_auto_close("Mail Successfully Sent", font=fstyle, no_titlebar=True)
 
