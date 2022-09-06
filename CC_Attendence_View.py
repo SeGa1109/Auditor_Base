@@ -51,20 +51,21 @@ def c_view_db(event,values,Menu):
         globals()['cv_data'] = [list(x) for x in mycursor.fetchall()]
         Menu["cc_view"].update(values=cv_data)
     if event == "cc_export":
+        mycursor.execute("select discription,amount from cc_work_list ")
+        db_data=[list(x) for x in mycursor.fetchall()]
+        amnt_data={}
+        for i in db_data:
+            amnt_data.update({i[0]:i[1]})
         data = cv_data
-        xl = openpyxl.load_workbook(filename=r'C:\Twink_06MA\Master_Files\Atn_Exp.xlsx')
-        for step in ['Attendance', 'OT', 'Expenses']:
-            xl.active = xl[step]
-            xlc = xl.active
-            atndata = datasplit(copy.deepcopy(data), step)
-            crow = 2
+        xl = openpyxl.load_workbook(filename=r'C:\Twink_06MA\Master_Files\Cleaning_crew_Atd_view.xlsx')
+        xlc = xl.active
+        crow = 2
+        for part in data:
+            part.append(amnt_data.get(part[2]))
             ccol = 1
-            for part in atndata:
-                for i in range(len(part)):
-                    xlc.cell(row=crow, column=ccol).value = part[i]
-                    ccol += 1
-                crow += 1
-                ccol = 1
-
-        xl.save(filename=r'C:\Twink_06MA\Master_Files\Atn_ExpT1.xlsx')
-        os.system(r'C:\Twink_06MA\Master_Files\Atn_ExpT1.xlsx')
+            for i in part:
+                xlc.cell(row=crow, column=ccol).value = i
+                ccol += 1
+            crow += 1
+        xl.save(filename=r'C:\Twink_06MA\Master_Files\CC_ATD_1.xlsx')
+        os.system(r'C:\Twink_06MA\Master_Files\CC_ATD_1.xlsx')

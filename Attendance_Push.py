@@ -162,7 +162,7 @@ def AttendancePushFn(Menu,event,values):
                chk1 = ms.popup_get_text(
                    "Attendance Already Created in the specified Date\n---\nPlease click yes to Update with a Master password",
                    font=fstyle, no_titlebar=True)
-               if chk1 == "AstA0903":
+               if chk1 == MasterPass:
                    mydb.rollback()
                    sql="INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')" \
                        % (todate.strftime("%Y/%m/%d %H:%M:%S"), values["atpers"],
@@ -170,98 +170,187 @@ def AttendancePushFn(Menu,event,values):
                    print(sql)
                    mycursor.execute(sql)
                    mydb.commit()
-                   pass
+
+                   atndata = []
+                   for i in range(len(emplistpy)):
+                       data = []
+                       data.append(values['atpecsy' + str(i)])
+                       if values['atp1ssy' + str(i)] == True:
+                           indata = '1'
+                       elif values['atp2ssy' + str(i)] == True:
+                           indata = '2'
+                       elif values['atp3ssy' + str(i)] == True:
+                           indata = '3'
+                       elif values['atpassy' + str(i)] == True:
+                           indata = 'A'
+                       else:
+                           continue
+                       indata += ","
+                       indata += str(values['atpotsy' + str(i)])
+                       indata += ","
+                       indata += str(values['atpxpsy' + str(i)])
+                       indata += ","
+                       indata += str(dplist.get(values['atpdpsy' + str(i)]))
+                       data.append(indata)
+                       atndata.append(data)
+                   for i in range(len(emplistpn)):
+                       data = []
+                       data.append(values['atpecsn' + str(i)])
+                       if values['atp1ssn' + str(i)] == True:
+                           indata = 'P'
+                       elif values['atp2ssn' + str(i)] == True:
+                           indata = 'A'
+                       else:
+                           continue
+                       indata += ","
+                       indata += str(values['atpotsn' + str(i)])
+                       indata += ","
+                       indata += str(values['atpxpsn' + str(i)])
+                       indata += ","
+                       indata += str(dplist.get(values['atpdpsn' + str(i)]))
+                       data.append(indata)
+                       atndata.append(data)
+                   for i in range(len(emplistny)):
+                       data = []
+                       data.append(values['atpecnsy' + str(i)])
+                       if values['atp1snsy' + str(i)] == True:
+                           indata = '1'
+                       elif values['atp2snsy' + str(i)] == True:
+                           indata = '2'
+                       elif values['atp3snsy' + str(i)] == True:
+                           indata = '3'
+                       elif values['atpasnsy' + str(i)] == True:
+                           indata = 'A'
+                       else:
+                           continue
+                       indata += ","
+                       indata += str(values['atpotnsy' + str(i)])
+                       indata += ","
+                       indata += str(values['atpxpnsy' + str(i)])
+                       indata += ","
+                       indata += str(dplist.get(values['atpdpnsy' + str(i)]))
+                       data.append(indata)
+                       atndata.append(data)
+                   for i in range(len(emplistnn)):
+                       data = []
+                       data.append(values['atpecnsn' + str(i)])
+                       if values['atp1snsn' + str(i)] == True:
+                           indata = 'P'
+                       elif values['atp2snsn' + str(i)] == True:
+                           indata = 'A'
+                       else:
+                           continue
+                       indata += ","
+                       indata += str(values['atpotnsn' + str(i)])
+                       indata += ","
+                       indata += str(values['atpxpnsn' + str(i)])
+                       indata += ","
+                       indata += str(dplist.get(values['atpdpnsn' + str(i)]))
+                       data.append(indata)
+                       atndata.append(data)
+                   print(pushdate, atndata)
+                   for x in range(len(atndata)):
+                       sql = "update %s_%s set `%s` = '%s' where empcode = '%s'" % \
+                             (pushdate[1], pushdate[2], pushdate[0], atndata[x][1], atndata[x][0])
+                       print(sql)
+                       mycursor.execute(sql)
+
+                   sql = "update %s_%s set `%s` = 'v' where empcode = 'counter'" % \
+                         (pushdate[1], pushdate[2], pushdate[0],)
+                   mycursor.execute(sql)
+                   mydb.commit()
+
                else:
                    ms.popup_auto_close("Wrong Password", auto_close_duration=1)
                    return
+           else:
+               atndata = []
+               for i in range(len(emplistpy)):
+                   data = []
+                   data.append(values['atpecsy' + str(i)])
+                   if values['atp1ssy' + str(i)] == True:
+                       indata = '1'
+                   elif values['atp2ssy' + str(i)] == True:
+                       indata = '2'
+                   elif values['atp3ssy' + str(i)] == True:
+                       indata = '3'
+                   elif values['atpassy' + str(i)] == True:
+                       indata = 'A'
+                   else:
+                       indata = 'e'
+                   indata += ","
+                   indata += str(values['atpotsy' + str(i)])
+                   indata += ","
+                   indata += str(values['atpxpsy' + str(i)])
+                   indata += ","
+                   indata += str(dplist.get(values['atpdpsy'+ str(i)]))
+                   data.append(indata)
+                   atndata.append(data)
+               for i in range(len(emplistpn)):
+                   data = []
+                   data.append(values['atpecsn' + str(i)])
+                   if values['atp1ssn' + str(i)] == True:
+                       indata = 'P'
+                   elif values['atp2ssn' + str(i)] == True:
+                       indata = 'A'
+                   else:
+                       indata = 'e'
+                   indata += ","
+                   indata += str(values['atpotsn' + str(i)])
+                   indata += ","
+                   indata += str(values['atpxpsn' + str(i)])
+                   indata += ","
+                   indata += str(dplist.get(values['atpdpsn'+ str(i)]))
+                   data.append(indata)
+                   atndata.append(data)
+               for i in range(len(emplistny)):
+                   data = []
+                   data.append(values['atpecnsy' + str(i)])
+                   if values['atp1snsy' + str(i)] == True:
+                       indata = '1'
+                   elif values['atp2snsy' + str(i)] == True:
+                       indata = '2'
+                   elif values['atp3snsy' + str(i)] == True:
+                       indata = '3'
+                   elif values['atpasnsy' + str(i)] == True:
+                       indata = 'A'
+                   else:
+                       indata = 'e'
+                   indata += ","
+                   indata += str(values['atpotnsy' + str(i)])
+                   indata += ","
+                   indata += str(values['atpxpnsy' + str(i)])
+                   indata += ","
+                   indata += str(dplist.get(values['atpdpnsy'+ str(i)]))
+                   data.append(indata)
+                   atndata.append(data)
+               for i in range(len(emplistnn)):
+                   data = []
+                   data.append(values['atpecnsn' + str(i)])
+                   if values['atp1snsn' + str(i)] == True:
+                       indata = 'P'
+                   elif values['atp2snsn' + str(i)] == True:
+                       indata = 'A'
+                   else:
+                       indata = 'e'
+                   indata += ","
+                   indata += str(values['atpotnsn' + str(i)])
+                   indata += ","
+                   indata += str(values['atpxpnsn' + str(i)])
+                   indata += ","
+                   indata += str(dplist.get(values['atpdpnsn'+ str(i)]))
+                   data.append(indata)
+                   atndata.append(data)
+               print(pushdate, atndata)
+               for x in range(len(atndata)):
+                   sql = "update %s_%s set `%s` = '%s' where empcode = '%s'" % \
+                         (pushdate[1], pushdate[2], pushdate[0], atndata[x][1], atndata[x][0])
+                   print(sql)
+                   mycursor.execute(sql)
 
-           atndata = []
-           for i in range(len(emplistpy)):
-               data = []
-               data.append(values['atpecsy' + str(i)])
-               if values['atp1ssy' + str(i)] == True:
-                   indata = '1'
-               elif values['atp2ssy' + str(i)] == True:
-                   indata = '2'
-               elif values['atp3ssy' + str(i)] == True:
-                   indata = '3'
-               elif values['atpassy' + str(i)] == True:
-                   indata = 'A'
-               else:
-                   indata = 'e'
-               indata += ","
-               indata += str(values['atpotsy' + str(i)])
-               indata += ","
-               indata += str(values['atpxpsy' + str(i)])
-               indata += ","
-               indata += str(dplist.get(values['atpdpsy'+ str(i)]))
-               data.append(indata)
-               atndata.append(data)
-           for i in range(len(emplistpn)):
-               data = []
-               data.append(values['atpecsn' + str(i)])
-               if values['atp1ssn' + str(i)] == True:
-                   indata = 'P'
-               elif values['atp2ssn' + str(i)] == True:
-                   indata = 'A'
-               else:
-                   indata = 'e'
-               indata += ","
-               indata += str(values['atpotsn' + str(i)])
-               indata += ","
-               indata += str(values['atpxpsn' + str(i)])
-               indata += ","
-               indata += str(dplist.get(values['atpdpsn'+ str(i)]))
-               data.append(indata)
-               atndata.append(data)
-           for i in range(len(emplistny)):
-               data = []
-               data.append(values['atpecnsy' + str(i)])
-               if values['atp1snsy' + str(i)] == True:
-                   indata = '1'
-               elif values['atp2snsy' + str(i)] == True:
-                   indata = '2'
-               elif values['atp3snsy' + str(i)] == True:
-                   indata = '3'
-               elif values['atpasnsy' + str(i)] == True:
-                   indata = 'A'
-               else:
-                   indata = 'e'
-               indata += ","
-               indata += str(values['atpotnsy' + str(i)])
-               indata += ","
-               indata += str(values['atpxpnsy' + str(i)])
-               indata += ","
-               indata += str(dplist.get(values['atpdpnsy'+ str(i)]))
-               data.append(indata)
-               atndata.append(data)
-           for i in range(len(emplistnn)):
-               data = []
-               data.append(values['atpecnsn' + str(i)])
-               if values['atp1snsn' + str(i)] == True:
-                   indata = 'P'
-               elif values['atp2snsn' + str(i)] == True:
-                   indata = 'A'
-               else:
-                   indata = 'e'
-               indata += ","
-               indata += str(values['atpotnsn' + str(i)])
-               indata += ","
-               indata += str(values['atpxpnsn' + str(i)])
-               indata += ","
-               indata += str(dplist.get(values['atpdpnsn'+ str(i)]))
-               data.append(indata)
-               atndata.append(data)
-           print(pushdate, atndata)
-           for x in range(len(atndata)):
-               sql = "update %s_%s set `%s` = '%s' where empcode = '%s'" % \
-                     (pushdate[1], pushdate[2], pushdate[0], atndata[x][1], atndata[x][0])
-               print(sql)
+               sql = "update %s_%s set `%s` = 'v' where empcode = 'counter'" % \
+                     (pushdate[1], pushdate[2], pushdate[0],)
                mycursor.execute(sql)
-
-           sql = "update %s_%s set `%s` = 'v' where empcode = 'counter'" % \
-                 (pushdate[1], pushdate[2], pushdate[0],)
-           mycursor.execute(sql)
-           mydb.commit()
+               mydb.commit()
        else:
            ms.popup_auto_close("Wrong Password", auto_close_duration=1)
