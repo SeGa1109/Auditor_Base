@@ -115,6 +115,7 @@ def Master_User(Menu,event,values):
             mydb.commit()
             Menu["user_data"].update(values=MUWFetch())
             Menu["add_user2"].update(visible=False)
+            ms.popup_auto_close("Added Successfully", font=fstyle)
     if event == "add_wdsp":
         if values['cc_wrk'] and values['amount'] !="":
             sql = "INSERT INTO cc_work_list ( discription,amount ) VALUES ( '%s','%s')" % (values['cc_wrk'], values['amount'])
@@ -122,6 +123,7 @@ def Master_User(Menu,event,values):
             mydb.commit()
             Menu["wrk_data"].update(values=CCWORKFetch())
             Menu["add_discription"].update(visible=False)
+            ms.popup_auto_close("Added Successfully", font=fstyle)
     if event == "add_mail_list":
         if values['ml_name'] and values['designation'] and values['mail_id'] !="":
             sql = "INSERT INTO mail_list (name_,designation,mail_id ) VALUES ( '%s','%s','%s')" % (
@@ -129,13 +131,15 @@ def Master_User(Menu,event,values):
             mycursor.execute(sql)
             mydb.commit()
             Menu["mail_data"].update(values=MAILFetch())
-            Menu["add_discription"].update(visible=False)
+            Menu["add_mail_user"].update(visible=False)
+            ms.popup_auto_close("Added Successfully", font=fstyle)
     if event == "Remove ":
         chk = ms.popup_get_text("Enter password to remove user ", password_char='*', size=(10,1), font=fstyle, no_titlebar=True, keep_on_top=True)
         if chk == MasterPass:
             mycursor.execute("DELETE FROM user_details WHERE UID='%s'" % remove_data(Menu,"user_data",values)[0][0])
             mydb.commit()
             Menu["user_data"].update(values=MUWFetch())
+            ms.popup_auto_close("Removed Successfully", font=fstyle)
         else:
             ms.popup_auto_close("Wrong Password",no_titlebar=True, auto_close_duration=2)
     if event == " Remove":
@@ -144,12 +148,15 @@ def Master_User(Menu,event,values):
             mycursor.execute("DELETE FROM cc_work_list WHERE WID='%s'" % remove_data(Menu,"wrk_data",values)[0][0])
             mydb.commit()
             Menu["user_data"].update(values=CCWORKFetch())
+            ms.popup_auto_close("Removed Successfully", font=fstyle)
     if event == " Remove ":
         chk = ms.popup_ok("Please Confirm to Delete", font=fstyle)
         if chk == "OK":
             mycursor.execute("DELETE FROM mail_list WHERE UID='%s'" % remove_data(Menu,"mail_data",values)[0][0])
             mydb.commit()
             Menu["mail_data"].update(values=MAILFetch())
+            ms.popup_auto_close("Removed Successfully", font=fstyle)
+
 
 '''Menu = ms.Window("Add Employee", [[ms.Column(Master_User_GUI(), scrollable=True, size=(960, 700), element_justification='centre')]], finalize=True)
 while True:

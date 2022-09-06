@@ -214,6 +214,10 @@ def RegisterFn(Menu, event, values):
             et_val=[True,False]
         elif ep_data[31]=="Non PF":
             et_val=[False,True]
+        if ep_data[33]=="yes":
+            o_f=True
+        elif ep_data[33] == "no":
+            o_f=False
         Employee_Details = [
             [ms.Text("Employee Name:", justification='left', size=(20, 1), font=fstyle, ),
              ms.Input(ep_data[1], size=(30, 1), enable_events=True,do_not_clear=True, key='u1', font=fstyle)],
@@ -288,7 +292,8 @@ def RegisterFn(Menu, event, values):
              ],
             [ms.Text("ET :", justification='left', size=(20, 1), font=fstyle, ),
              ms.Radio("PF","etype",default=et_val[0], size=(5, 1),enable_events=True, key='pf', font=fstyle),
-             ms.Radio("Non PF","etype",default=et_val[1], size=(6, 1),enable_events=True, key='non pf', font=fstyle)
+             ms.Radio("Non PF","etype",default=et_val[1], size=(6, 1),enable_events=True, key='non pf', font=fstyle),
+             ms.Checkbox("Office Staff",default=o_f, key="o_staffu", font=fstyle)
              ],
         ]
         try:
@@ -386,7 +391,7 @@ def RegisterFn(Menu, event, values):
                     'ifsc_code': values['u18'],'branch': values['u19'],'date_of_birth': values['u20'],
                     'date_of_join': values['u21'],
                     'nominee_name': values['u24'],'nominee_phone_no': values['u25'],
-                    'ET':"PF" if values['pf']==True else "Non PF"}
+                    'ET':"PF" if values['pf']==True else "Non PF",'office_staff':"yes" if values['o_staffu']==True else"no"}
 
             c_name=[key for key in dict]
             c_data=[dict[i] for i in dict]
@@ -402,11 +407,12 @@ def RegisterFn(Menu, event, values):
                           auto_close=True,
                           auto_close_duration=1)
             uMenu.close()
+            Menu["emp_data"].update(values=EmpdataFetch("PF"))
         else:
             ms.popup("Enter valid info..!")
 
     if event =="ccwin":
-        ccwMenu = ms.Window("Add Crow", [[ms.Column(Cleaning_Crew_GUI(), scrollable=True, size=(960, 700), element_justification='centre')]])
+        ccwMenu = ms.Window("Add Crew", [[ms.Column(Cleaning_Crew_GUI(), scrollable=True, size=(960, 700), element_justification='centre')]])
         while True:
             event, values = ccwMenu.read()
             if event == ms.WIN_CLOSED:
@@ -415,11 +421,14 @@ def RegisterFn(Menu, event, values):
             if event =="ccwadd":
                 ccwMenu["add_frame"].update(visible=True)
             if event =="add_crow":
-                sql ="INSERT INTO cleaning_crow ( crow_name,phone_no,pan_no,bank_account ) VALUES ( '%s','%s','%s','%s' )" % (values['c_name'],values['c_ph.no'],values['c_pan.no'],values['c_bkac.no'])
-                mycursor.execute(sql)
-                mydb.commit()
-                ccwMenu['ccw_data'].update(values=CCWFetch())
-                ccwMenu["add_frame"].update(visible=False)
+                if values['c_name'] and values['c_bkac.no'] and values['c_ph.no'] and values['c_pan.no'] !="":
+                    sql ="INSERT INTO cleaning_crew ( crew_name,phone_no,pan_no,bank_account ) VALUES ( '%s','%s','%s','%s' )" % (values['c_name'],values['c_ph.no'],values['c_pan.no'],values['c_bkac.no'])
+                    mycursor.execute(sql)
+                    mydb.commit()
+                    ccwMenu['ccw_data'].update(values=CCWFetch())
+                    ccwMenu["add_frame"].update(visible=False)
+                else:
+                    ms.popup_auto_close("Fill the details", font=fstyle, no_titlebar=True)
             if event == "ccw_data":
                 data = ccwMenu['ccw_data'].get()
                 globals()['crow1'] = [data[row] for row in values[event]]
@@ -549,7 +558,7 @@ def RegisterFn(Menu, event, values):
                             border(eMenu[event], "green")
                     if values[event] == "":
                         border(eMenu[event], None)
-                except ValueError:
+                except:
                     border(eMenu[event], "red")
             if event == "e12":
                 try:
@@ -558,7 +567,7 @@ def RegisterFn(Menu, event, values):
                             border(eMenu[event], "green")
                     if values[event] == "":
                         border(eMenu[event], None)
-                except ValueError:
+                except :
                     border(eMenu[event], "red")
             if event == "e13":
                 try:
@@ -821,7 +830,7 @@ def RegisterFn(Menu, event, values):
         for i in maillist:
             mail_content = "PFA"
             sender_address = 'asta.sunilindustries@gmail.com'
-            sender_pass = 'irlluaqjqvcefghd'
+            sender_pass = 'uxzgkfvkdzuxwpad'
             # Setup the MIME
             receiver_address = mailid_fetch(True,i)
             message = MIMEMultipart()

@@ -33,18 +33,24 @@ def CC_View_GUI():
     return layout
 def c_view_db(event,values,Menu):
     if event == 'cvf_date':
+        Menu['cvf_name'].update(value=" ")
+        Menu['cvf_dis'].update(value=" ")
         mycursor.execute("select wrk_date,crew_name,discription from cc_attendence  as catd "
                          "inner join cleaning_crew as cc on catd.UID  = cc.UID "
                          "inner join cc_work_list as cwl on catd.WID =cwl.WID where wrk_date='%s'" % values['cvf_date'])
         globals()['cv_data']=[list(x) for x in mycursor.fetchall()]
         Menu["cc_view"].update(values=cv_data)
     if event == "cvf_name":
+        Menu['cvf_date'].update(value=" ")
+        Menu['cvf_dis'].update(value=" ")
         mycursor.execute("select wrk_date,crew_name,discription from cc_attendence  as catd "
                          "inner join cleaning_crew as cc on catd.UID  = cc.UID "
                          "inner join cc_work_list as cwl on catd.WID =cwl.WID where crew_name='%s'" % values['cvf_name'])
         globals()['cv_data'] = [list(x) for x in mycursor.fetchall()]
         Menu["cc_view"].update(values=cv_data)
     if event == "cvf_dis":
+        Menu['cvf_name'].update(value=" ")
+        Menu['cvf_date'].update(value=" ")
         mycursor.execute("select wrk_date,crew_name,discription from cc_attendence  as catd "
                          "inner join cleaning_crew as cc on catd.UID  = cc.UID "
                          "inner join cc_work_list as cwl on catd.WID =cwl.WID where discription='%s'" % values['cvf_dis'])

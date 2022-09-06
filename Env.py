@@ -295,7 +295,7 @@ def mailreport(inp):
     for i in maillist:
         mail_content = "\n".join("{}\t           {}".format(k, v) for k, v in worklog.items())
         sender_address = 'asta.sunilindustries@gmail.com'
-        sender_pass = 'irlluaqjqvcefghd'
+        sender_pass = 'uxzgkfvkdzuxwpad'
         # Setup the MIME
         receiver_address = mailid_fetch(True, i)
         message = MIMEMultipart()

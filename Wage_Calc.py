@@ -185,13 +185,14 @@ def WageCalcFn(Menu,event,values):
                 colc += 1
             rowc += 1
         xl.save(r"C:\Twink_06MA\Master_Files\Wage_Exp_01.xlsx")
+        os.system(r"C:\Twink_06MA\Master_Files\Wage_Exp_01.xlsx")
 
     if event == 'wcmail':
         maillist=popup_select(mailid_fetch(False,""), select_multiple=True)
         for i in maillist:
             mail_content = "PFA"
             sender_address = 'asta.sunilindustries@gmail.com'
-            sender_pass = 'irlluaqjqvcefghd'
+            sender_pass = 'uxzgkfvkdzuxwpad'
             # Setup the MIME
             receiver_address = mailid_fetch(True,i)
             message = MIMEMultipart()

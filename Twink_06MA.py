@@ -85,7 +85,7 @@ while True:
         if event == 'Master User' or event[:2] == 'F9' :
             chk = ms.popup_get_text("Enter password to enter Master User ", password_char='*', size=(20, 1), font=fstyle,
                                      keep_on_top=True)
-            if chk == "AstA_SIL":
+            if chk == MasterPass:
                 for i in MenuList:
                     Menu[i].update(visible=False)
                 Menu['mumneu'].update(visible=True)

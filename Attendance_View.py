@@ -66,8 +66,6 @@ def AdvanceoptLay():
 TestMenu=ms.Window("", AdvanceoptLay(),location=(0,0),element_justification='center')
 while True:
     event,values = TestMenu.read()
-
-
 '''
 def AttendaceViewFn(Menu,event,values):
     if event == 'atnvwfltr':
@@ -104,7 +102,7 @@ def AttendaceViewFn(Menu,event,values):
         chk=ms.popup_ok("Please confirm to generate advance amount",font=fstyle)
         if chk == "OK":
             mycursor.execute("insert into advance_details (empcode,"
-                             "amount,exdate) values('%s','%s','%s')"%(values['adv_empid'],values['adv_amount'],"2022-08-05"))
+                             "amount,exdate) values('%s','%s','%s')"%(values['adv_empid'],values['adv_amount'],todatestr))
             mydb.commit()
             Menu['TL_AdvView'].update(values=(advancefetch(todatemy)))
             Menu['adv_empid'].update("")
@@ -126,6 +124,8 @@ def AttendaceViewFn(Menu,event,values):
                         "empcode='%s' and exdate = '%s'" %(advcrow[0][1],(datetime.strptime(advcrow[0][0], "%d-%m-%Y").strftime("%Y-%m-%d"))))
                 mydb.commit()
                 Menu['TL_AdvView'].update(values=advancefetch(todatenf))
+            else:
+                ms.popup_ok("Wrong Pasword", font=fstyle)
 
     if event == 'advdateinp':
         try:
@@ -154,7 +154,7 @@ def AttendaceViewFn(Menu,event,values):
         for i in maillist:
             mail_content = "PFA"
             sender_address = 'asta.sunilindustries@gmail.com'
-            sender_pass = 'irlluaqjqvcefghd'
+            sender_pass = 'uxzgkfvkdzuxwpad'
             # Setup the MIME
             receiver_address = mailid_fetch(True,i)
             message = MIMEMultipart()
