@@ -55,3 +55,5 @@ def cc_att_(event,values,Menu):
 
         else:
             ms.popup_auto_close("Wrong Password", auto_close_duration=1)
+
+#v6.0

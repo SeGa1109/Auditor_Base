@@ -114,7 +114,7 @@ def AttendaceViewFn(Menu,event,values):
     if event == 'TL_AdvView':
         data = Menu['TL_AdvView'].get()
         globals()['advcrow'] = [data[row] for row in values[event]]
-        print(advcrow)
+        #print(advcrow)
     if event == 'Remove Advance':
         chk = ms.popup_ok("Please Confirm to Delete", font=fstyle)
         if chk == "OK":
@@ -126,6 +126,7 @@ def AttendaceViewFn(Menu,event,values):
                 Menu['TL_AdvView'].update(values=advancefetch(todatenf))
             else:
                 ms.popup_ok("Wrong Pasword", font=fstyle)
+
 
     if event == 'advdateinp':
         try:
@@ -178,13 +179,7 @@ def AttendaceViewFn(Menu,event,values):
             text = message.as_string()
             session.sendmail(sender_address, receiver_address, text)
             session.quit()
-            print('Mail Sent')
+            #print('Mail Sent')
         ms.popup_auto_close("Mail Successfully Sent", font=fstyle, no_titlebar=True)
 
-
-
-
-
-
-        
-
+#v6.0

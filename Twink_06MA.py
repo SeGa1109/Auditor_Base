@@ -1,5 +1,3 @@
-from Env import *
-
 #---Initiation
 from Env import *
 import Attendance_Push
@@ -10,6 +8,8 @@ import Master_User
 import Cleaning_Crew
 import CC_Attendence_View
 #---Custom DB Declaration
+sys.stdout = open('C:\Twink_06MA\Logs\%s.txt'%todate.strftime("%Y-%m-%d-%H-%M") , 'w')
+
 mycursor.execute('Use Twink_06ma')
 mydb.commit()
 
@@ -51,8 +51,7 @@ MenuList=["base","register",'atnpush','atnview','wagecalc','mumneu','c_view','cc
 Menu = ms.Window("Twink_Attendance",layout,location=(0,0),size=(swi,shi),element_justification='center',return_keyboard_events=True)
 
 while True:
-
-    #try:
+    try:
         event, values = Menu.read()
         print(event)
         if event == ms.WIN_CLOSED:
@@ -127,9 +126,14 @@ while True:
             chk=ms.popup_ok("Please confrim to send mail",font=fstyle,no_titlebar=True)
             if chk == "OK":
                 mailreport(todatenf)
-    #except Exception as e:
-       # ms.popup_ok(e,font=fstyle,title="Error, Please try again")
+
+    except Exception as e:
+        tb = traceback.format_exc()
+        ms.popup_animated(None)
+        ms.popup_error(f'AN EXCEPTION OCCURRED!', e, tb)
 
 
+sys.stdout.close()
 
 
+#v6.0

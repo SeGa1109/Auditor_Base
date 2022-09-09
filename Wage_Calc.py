@@ -18,7 +18,7 @@ def WageCalcLay():
              )
     ]]
     layout=[
-        [ms.Input(todatemy,font=fstyle,size=(10,1),key='wcdateinp'),ms.CalendarButton(" ",target='wcdateinp',format="%m-%Y"),
+        [ms.Input(todatemy,font=fstyle,size=(10,1),key='wcdateinp'),ms.CalendarButton(" ",image_data=chse,target='wcdateinp',format="%m-%Y"),
          ms.Button("Generate",key='wcgen',font=fstyle),ms.Sizer(400,0), ms.Text("Wages Report Generation",font=fstylehd ),ms.Sizer(400,0),
          ms.Button("Export",key='wcexp',font=fstyle,disabled=True),
          ms.Button("Mail", key='wcmail', font=fstyle, disabled=True)
@@ -44,11 +44,11 @@ def WageCalcFn(Menu,event,values):
                     temp.append(step[i])
                 #print(step)
                 chk = shiftcheck(step[0])
-                print(chk)
+                #print(chk)
                 if chk == True:# if Emp is Shift resource
-                    print(step)
+                    #print(step)
                     wagetemp=wagedata.get(step[0])
-                    print(wagetemp)
+                    #print(wagetemp)
                     temp.append("NA")
                     S1,S2,S3,OT=0,0,0,0
                     CE=0.0
@@ -96,7 +96,7 @@ def WageCalcFn(Menu,event,values):
                     temp.append("NA")
                     wage = DP*wagetemp
                     temp.append(wage)
-                    print(OT,wagetemp)
+                    #print(OT,wagetemp)
                     ot_wage = (OT / 8 * wagetemp)
                     if step[3] == "yes":
                         incentive = 0.0
@@ -122,7 +122,7 @@ def WageCalcFn(Menu,event,values):
                 wage_proc_data.append(temp)
             #except Exception as e:
                 #print(e)
-        print(wage_proc_data)
+        #print(wage_proc_data)
         Menu['TL_WC'].update(values=wage_proc_data)
         Menu['wcexp'].update(disabled=False)
         Menu['wcmail'].update(disabled=False)
@@ -162,7 +162,7 @@ def WageCalcFn(Menu,event,values):
             db_data.append(step[16])
             pfempwage.append(db_data)
 
-        print(pfempwage,nonpfempwage)
+        #(pfempwage,nonpfempwage)
         xl.active=xl['PF']
         xlc=xl.active
         rowc=2
@@ -216,10 +216,7 @@ def WageCalcFn(Menu,event,values):
             text = message.as_string()
             session.sendmail(sender_address, receiver_address, text)
             session.quit()
-            print('Mail Sent')
+            #print('Mail Sent')
         ms.popup_auto_close("Mail Successfully Sent", font=fstyle, no_titlebar=True)
 
-
-
-
-
+#v6.0

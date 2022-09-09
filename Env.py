@@ -18,6 +18,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+import traceback
+import sys
 
 
 
@@ -84,7 +86,7 @@ def EmpdataFetch(type):
                          'concat(shift_1_salary,",",shift_2_salary,",",shift_3_salary) from register '
                          'where active_status = "Y" and ET ="PF" and shift_work = "Yes" order by employee_name')
         S2 = [list(x) for x in mycursor.fetchall()]
-        print(S1+S2)
+        #print(S1+S2)
         return S1+S2
     if type=="Non PF":
         mycursor.execute("select Emp_code, employee_name,f_sp_name,Gender,Phone_no,base_salary "
@@ -94,7 +96,7 @@ def EmpdataFetch(type):
                          'concat(shift_1_salary,",",shift_2_salary,",",shift_3_salary) from register '
                          'where active_status = "Y" and ET ="Non PF" and shift_work = "Yes" order by employee_name')
         S2 = [list(x) for x in mycursor.fetchall()]
-        print(S1 + S2)
+        #print(S1 + S2)
         return S1+S2
 
 def DB_Creation(inp):
@@ -169,7 +171,7 @@ def datasplit(data,filter):
         mycursor.execute("select UID,Description from dep_list")
         db_data = mycursor.fetchall()
         dplist = {int(x[0]): (x[1]) for x in db_data}
-        print(dplist)
+        #print(dplist)
         for part in data:
             for i in range(4,len(part)):
                 if part[i]!=None:
@@ -221,7 +223,7 @@ wage_fetch()
 
 def user_pass(name):
     sql = "select user_password from user_details where `user_name`='%s'" % name
-    print(sql)
+    #print(sql)
     mycursor.execute(sql)
 
     return [list(x) for x in mycursor.fetchall()]
@@ -273,7 +275,7 @@ def mailreport(inp):
     mycursor.execute("select `%s` from %s_%s" % (dateform[0], dateform[1], dateform[2]))
     db_data = list(sum(mycursor.fetchall(), ()))
     db_data.pop(0)
-    print(db_data)
+    #print(db_data)
     for i in range(len(db_data)):
         if db_data[i] != None:
             temp = list(db_data[i].split(","))
@@ -283,9 +285,9 @@ def mailreport(inp):
                 pass
         else:
             pass
-    print(db_data)
+    #print(db_data)
     worklist = set(db_data)
-    print(worklist)
+    #print(worklist)
     worklog = {}
     worklog.update({"Count": "Department"})
     for i in worklist:
@@ -331,7 +333,7 @@ def wageadvfetch(inp,datefo):
     mycursor.execute("select amount from advance_details where empcode='%s' and "
                      "month(exdate) = '%s' and year(exdate) = '%s'"%(inp,dateform[0],dateform[1]))
     db_data=list(sum(mycursor.fetchall(),()))
-    print(db_data)
+    #print(db_data)
     return sum(db_data)
 
 def shiftcheck(inp):
@@ -357,3 +359,5 @@ def mailid_fetch(x,inp):
     else:
         mycursor.execute("select mail_id from mail_list where name_='%s'"%inp)
         return mycursor.fetchall()[0][0]
+
+#v6.0

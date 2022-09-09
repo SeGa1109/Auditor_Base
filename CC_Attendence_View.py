@@ -23,7 +23,7 @@ def CC_View_GUI():
                ms.Text("Name", font=fstyle, size=(7, 1)),
                ms.Sizer(500,0),
                ms.Text("Discription", font=fstyle, size=(13, 1))],
-              [ms.Sizer(88,0),ms.CalendarButton(" ", target='cvf_date', format="%y-%m-%d"),
+              [ms.Sizer(88,0),ms.CalendarButton(" ",image_data=chse, target='cvf_date', format="%y-%m-%d"),
                ms.Input("", enable_events=True, size=(13, 1),pad=(0,0), font=fstyle, key='cvf_date'),
                ms.Combo(f_name, enable_events=True, size=(28, 1),pad=(0,0), font=fstyle, key='cvf_name'),
                ms.Combo(f_dis, enable_events=True, size=(79, 1),pad=(0,0), font=fstyle, key='cvf_dis')],
@@ -75,3 +75,5 @@ def c_view_db(event,values,Menu):
             crow += 1
         xl.save(filename=r'C:\Twink_06MA\Master_Files\CC_ATD_1.xlsx')
         os.system(r'C:\Twink_06MA\Master_Files\CC_ATD_1.xlsx')
+
+#v6.0

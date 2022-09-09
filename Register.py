@@ -326,7 +326,7 @@ def RegisterFn(Menu, event, values):
                 Nominee=None
         except:
             Photo,Signature,Nominee=None,None,None
-        print(Photo,Signature,Nominee)
+        #print(Photo,Signature,Nominee)
         #---
         Employee_Image = [[ms.Image(data=Photo, key="-IMAGE-",subsample=3)]]
         Signature_Image = [[ms.Image(data=Signature,key="-IMAGE2-",size=(170, 100),subsample=10)]]
@@ -726,7 +726,7 @@ def RegisterFn(Menu, event, values):
                                                           element_justification='centre')]])
         while True:
             event, values = uMenu.read()
-            print(event)
+            #print(event)
             if event == ms.WIN_CLOSED:
                 uMenu.close()
                 break
@@ -854,6 +854,6 @@ def RegisterFn(Menu, event, values):
             text = message.as_string()
             session.sendmail(sender_address, receiver_address, text)
             session.quit()
-            print('Mail Sent')
+            #print('Mail Sent')
         ms.popup_auto_close("Mail Successfully Sent", font=fstyle, no_titlebar=True)
 

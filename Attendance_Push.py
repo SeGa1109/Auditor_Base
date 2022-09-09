@@ -116,7 +116,7 @@ def AttendancePushLay():
         [ms.Text("Attendance Register",font=fstylehd)],
         [ms.Text("Entry Person",font=fstyle,size=(12,1)),ms.Combo(values=user_name(),font=fstyle,size=(20,1),key='atpers'),ms.Sizer(swi-650,0),
          ms.Text("Date",font=fstyle,size=(5,1)),ms.InputText("",size=(15,1),font=fstyle,key="atpdate"),
-         ms.CalendarButton(" ",target='atpdate',format="%d-%m-%Y",location=(1250,100))],
+         ms.CalendarButton(todatenf,target='atpdate',image_data=chse, format="%d-%m-%Y",location=(1250,100))],
         [ms.Frame("Entry",layout= [[ms.Column(datalist,scrollable=True,vertical_scroll_only= True,visible=True,size=(swi-70,shi-220),key='atppf'),
                                    ms.Column(datalistnp,scrollable=True,visible=False,vertical_scroll_only=True,size=(swi-70,shi-220),key='atpnpf')],
                                    [ms.Checkbox("Non Pf",key='atpswap',enable_events= True,font=fstyle)]],
@@ -145,8 +145,8 @@ def AttendancePushFn(Menu,event,values):
             Menu['atpnpf'].update(visible=True)
 
     if event == 'atpupdate':
-       print(values['atpers'])
-       print("ckecking", user_pass(values['atpers'])[0][0])
+       #print(values['atpers'])
+       #print("ckecking", user_pass(values['atpers'])[0][0])
        if values['atppw']==user_pass(values['atpers'])[0][0]:
            pushdate = list(values['atpdate'].split("-"))
            DB_Creation(values['atpdate'])
@@ -167,7 +167,7 @@ def AttendancePushFn(Menu,event,values):
                    sql="INSERT INTO `twink_06ma`.`attendance_log`(`gen_date`,`person`,`pushdate`,`status`) values ('%s','%s','%s','%s')" \
                        % (todate.strftime("%Y/%m/%d %H:%M:%S"), values["atpers"],
                           datetime.strptime(values['atpdate'], "%d-%m-%Y").strftime("%Y-%m-%d"), "U")
-                   print(sql)
+                   #print(sql)
                    mycursor.execute(sql)
                    mydb.commit()
 
@@ -248,11 +248,11 @@ def AttendancePushFn(Menu,event,values):
                        indata += str(dplist.get(values['atpdpnsn' + str(i)]))
                        data.append(indata)
                        atndata.append(data)
-                   print(pushdate, atndata)
+                   #print(pushdate, atndata)
                    for x in range(len(atndata)):
                        sql = "update %s_%s set `%s` = '%s' where empcode = '%s'" % \
                              (pushdate[1], pushdate[2], pushdate[0], atndata[x][1], atndata[x][0])
-                       print(sql)
+                       #print(sql)
                        mycursor.execute(sql)
 
                    sql = "update %s_%s set `%s` = 'v' where empcode = 'counter'" % \
@@ -341,11 +341,11 @@ def AttendancePushFn(Menu,event,values):
                    indata += str(dplist.get(values['atpdpnsn'+ str(i)]))
                    data.append(indata)
                    atndata.append(data)
-               print(pushdate, atndata)
+               #print(pushdate, atndata)
                for x in range(len(atndata)):
                    sql = "update %s_%s set `%s` = '%s' where empcode = '%s'" % \
                          (pushdate[1], pushdate[2], pushdate[0], atndata[x][1], atndata[x][0])
-                   print(sql)
+                   #print(sql)
                    mycursor.execute(sql)
 
                sql = "update %s_%s set `%s` = 'v' where empcode = 'counter'" % \
@@ -354,3 +354,5 @@ def AttendancePushFn(Menu,event,values):
                mydb.commit()
        else:
            ms.popup_auto_close("Wrong Password", auto_close_duration=1)
+
+#v6.0
